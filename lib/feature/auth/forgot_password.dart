@@ -37,7 +37,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  Future<void> login() async {
+  Future<void> forgotPassword() async {
     setState(() {
       loading = true;
     });
@@ -142,7 +142,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          onPressed: isFormValid ? () => login() : null,
+                          onPressed: isFormValid ? () => forgotPassword() : null,
                           child: Text(
                             'Xác nhận',
                             style: TextStyle(
