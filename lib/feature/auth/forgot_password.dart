@@ -72,7 +72,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(
-          'Đăng nhập',
+          'Quên mật khẩu',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -107,7 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             horizontal: 16,
                             vertical: 16.h,
                           ),
-                          labelText: 'Email hoặc tên người dùng',
+                          labelText: 'Email ',
                           labelStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,
