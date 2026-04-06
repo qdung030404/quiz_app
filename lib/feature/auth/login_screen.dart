@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quiz_app/feature/auth/auth_service.dart';
+import 'package:quiz_app/feature/auth/forgot_password.dart';
 import 'package:quiz_app/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,12 +15,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final email = TextEditingController();
   final password = TextEditingController();
-
-  final supabase = Supabase.instance.client;
+  final _authService = AuthService();
 
   final bool _obscuredPassword = true;
   bool isFormValid = false;
-  bool loading = false;
 
   void _updateFormValidStatus() {
     setState(() {
@@ -41,28 +40,40 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> login() async {
-    setState(() {
-      loading = true;
-    });
-    try {
-      final result = await supabase.auth.signInWithPassword(
-        email: email.text,
-        password: password.text,
+  Future<void> signIn() async {
+    final result = await _authService.signIn(
+      email: email.text,
+      password: password.text,
+    );
+    if (!mounted) return;
+    if (result.success) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        (_) => false,
       );
-      if (result.user != null && result.session != null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
-          (context) => false,
-        );
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      setState(() {
-        loading = false;
-      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Đăng nhập thất bại'),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    final result = await _authService.signInWithGoogle();
+    if (!mounted) return;
+    if (result.success) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        (_) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Đăng nhập Google thất bại'),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 
@@ -109,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             horizontal: 16,
                             vertical: 16.h,
                           ),
-                          labelText: 'Email hoặc tên người dùng',
+                          labelText: 'Email',
                           labelStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 16.sp,
@@ -160,37 +171,40 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      loading
-                          ? Center(child: CircularProgressIndicator())
-                          : SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xff2A1896),
-                                  disabledBackgroundColor: Colors.grey,
-                                  disabledForegroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                ),
-                                onPressed: isFormValid ? () => login() : null,
-                                child: Text(
-                                  'Đăng nhập',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16.sp,
-                                  ),
-                                ),
-                              ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff2A1896),
+                            disabledBackgroundColor: Colors.grey,
+                            disabledForegroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
+                          ),
+                          onPressed: isFormValid ? () => signIn() : null,
+                          child: Text(
+                            'Đăng nhập',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 20),
                       Center(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ForgotPasswordScreen(),
+                              ),
+                            );
+                          },
                           child: Text(
                             'Quên mật khẩu',
                             style: TextStyle(
@@ -212,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () => signInWithGoogle(),
                           icon: FaIcon(
                             FontAwesomeIcons.google,
                             color: Colors.white,

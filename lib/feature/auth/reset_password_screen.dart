@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:quiz_app/feature/auth/auth_service.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -14,7 +12,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
-  final _supabase = Supabase.instance.client;
+  final _authService = AuthService();
 
   bool _loading = false;
   bool _obscurePassword = true;
@@ -34,42 +32,23 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Future<void> _updatePassword() async {
     if (!_isFormValid) return;
     setState(() => _loading = true);
-    try {
-      await _supabase.auth.updateUser(
-        UserAttributes(password: _passwordController.text),
-      );
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Đặt lại mật khẩu thành công!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        // Đăng xuất session reset rồi về màn login
-        await _supabase.auth.signOut();
-        if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
-      }
-    } on AuthException catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.message),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Lỗi: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _loading = false);
+    final result = await _authService.updatePassword(
+      newPassword: _passwordController.text,
+    );
+    if (!mounted) return;
+    setState(() => _loading = false);
+    if (result.success) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Đặt lại mật khẩu thành công!'),
+        backgroundColor: Colors.green,
+      ));
+      await _authService.signOut();
+      if (mounted) Navigator.of(context).popUntil((r) => r.isFirst);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Không thể cập nhật mật khẩu'),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 

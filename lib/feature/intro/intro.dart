@@ -1,16 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quiz_app/feature/auth/auth_service.dart';
 import 'package:quiz_app/feature/auth/login_screen.dart';
 import 'package:quiz_app/feature/auth/register_screen.dart';
+import 'package:quiz_app/main.dart';
 
-class Intro extends StatelessWidget {
+class Intro extends StatefulWidget {
   const Intro({super.key});
+
+  @override
+  State<Intro> createState() => _IntroState();
+}
+
+class _IntroState extends State<Intro> {
+  final _authService = AuthService();
+  bool _loadingGoogle = false;
+
+  Future<void> _signInWithGoogle() async {
+    setState(() => _loadingGoogle = true);
+    final result = await _authService.signInWithGoogle();
+    if (!mounted) return;
+    setState(() => _loadingGoogle = false);
+    if (result.success) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        (_) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Đăng nhập Google thất bại'),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0C0630),
+      backgroundColor: const Color(0xFF0C0630),
       body: SizedBox(
         width: double.infinity,
         child: Column(
@@ -32,7 +61,7 @@ class Intro extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   SizedBox(
@@ -45,20 +74,29 @@ class Intro extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      onPressed: () {},
-                      icon: FaIcon(FontAwesomeIcons.google, color: Colors.white, size: 24,),
+                      onPressed: _loadingGoogle ? null : _signInWithGoogle,
+                      icon: _loadingGoogle
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const FaIcon(FontAwesomeIcons.google,
+                              color: Colors.white, size: 24),
                       label: Text(
-                        'Đăng nhập với google',
+                        'Đăng nhập với Google',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16.sp,
                         ),
                       ),
-
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -73,11 +111,12 @@ class Intro extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterScreen(),
+                            builder: (_) => const RegisterScreen(),
                           ),
                         );
                       },
-                      icon: FaIcon(FontAwesomeIcons.envelope, color: Colors.white, size: 24,),
+                      icon: const FaIcon(FontAwesomeIcons.envelope,
+                          color: Colors.white, size: 24),
                       label: Text(
                         'Đăng ký với email',
                         style: TextStyle(
@@ -88,7 +127,7 @@ class Intro extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -105,14 +144,14 @@ class Intro extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LoginScreen(),
+                              builder: (_) => const LoginScreen(),
                             ),
                           );
                         },
                         child: Text(
                           'Đăng Nhập',
                           style: TextStyle(
-                            color: Color(0xff9181F4),
+                            color: const Color(0xff9181F4),
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),

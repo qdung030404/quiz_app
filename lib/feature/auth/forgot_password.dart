@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:quiz_app/feature/auth/auth_service.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -11,9 +11,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final email = TextEditingController();
-  final password = TextEditingController();
-
-  final supabase = Supabase.instance.client;
+  final _authService = AuthService();
 
   bool isFormValid = false;
   bool loading = false;
@@ -33,34 +31,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   void dispose() {
     email.dispose();
-    password.dispose();
     super.dispose();
   }
 
   Future<void> forgotPassword() async {
-    setState(() {
-      loading = true;
-    });
-    try {
-      await supabase.auth.resetPasswordForEmail(
-        email.text,
-        redirectTo: 'quizapp://reset-callback',
-      );
+    setState(() => loading = true);
+    final result = await _authService.sendPasswordReset(email: email.text);
+    if (!mounted) return;
+    setState(() => loading = false);
+    if (result.success) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Vui lòng kiểm tra email để đặt lại mật khẩu'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      setState(() {
-        loading = false;
-      });
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Vui lòng kiểm tra email để đặt lại mật khẩu'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Có lỗi xảy ra'),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 

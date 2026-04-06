@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quiz_app/feature/auth/auth_service.dart';
 import 'package:quiz_app/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,45 +13,39 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final email = TextEditingController();
   final password = TextEditingController();
-
-  final supabase = Supabase.instance.client;
+  final _authService = AuthService();
 
   final bool _obscuredPassword = true;
   bool isFormValid = false;
 
   Future<void> register() async {
-    try {
-      final result = await supabase.auth.signUp(
-        email: email.text,
-        password: password.text,
+    final result = await _authService.signUp(
+      email: email.text,
+      password: password.text,
+    );
+    if (!mounted) return;
+    if (result.success) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Đăng ký thành công'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        (_) => false,
       );
-      if (result.user != null) {
-        if (result.session != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(' đăng ký thành công'),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ),
-          );
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
-            (context) => false,
-          );
-        }
-      }
-    } on AuthException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Email đã được đăng ký'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 2),
-        ),
-      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result.errorMessage ?? 'Đăng ký thất bại'),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 2),
+      ));
     }
   }
 
+  String? emailValidator(String? value) => _authService.validateEmail(value);
+  String? passwordValidator(String? value) => _authService.validatePassword(value);
   void _updateFormValidStatus() {
     setState(() {
       isFormValid = email.text.isNotEmpty && password.text.isNotEmpty;
@@ -104,6 +98,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               TextFormField(
                 style: const TextStyle(color: Colors.white),
                 controller: email,
+                validator: emailValidator,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xff9181F4),
@@ -135,6 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 style: const TextStyle(color: Colors.white),
                 controller: password,
                 obscureText: _obscuredPassword,
+                validator: passwordValidator,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xff9181F4),
