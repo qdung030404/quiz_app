@@ -18,30 +18,37 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   final bool _obscuredPassword = true;
   bool isFormValid = false;
-  bool loading = false;
 
   Future<void> register() async {
-    setState(() {
-      loading = true;
-    });
     try {
       final result = await supabase.auth.signUp(
         email: email.text,
         password: password.text,
       );
-      if (result.user != null && result.session != null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
-          (context) => false,
-        );
+      if (result.user != null) {
+        if (result.session != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(' đăng ký thành công'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
+            (context) => false,
+          );
+        }
       }
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      setState(() {
-        loading = false;
-      });
+    } on AuthException {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Email đã được đăng ký'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -104,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     horizontal: 16,
                     vertical: 16.h,
                   ),
-                  labelText: 'Email hoặc tên người dùng',
+                  labelText: 'Email',
                   labelStyle: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -155,31 +162,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               SizedBox(height: 20),
-              loading
-                  ? Center(child: CircularProgressIndicator())
-                  : SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff2A1896),
-                          disabledBackgroundColor: Colors.grey,
-                          disabledForegroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        onPressed: isFormValid ? () => register() : null,
-                        child: Text(
-                          'Đăng ký',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff2A1896),
+                    disabledBackgroundColor: Colors.grey,
+                    disabledForegroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
+                  ),
+                  onPressed: isFormValid ? () => register() : null,
+                  child: Text(
+                    'Đăng ký',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
