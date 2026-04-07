@@ -16,15 +16,19 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> nextScreen() async {
     await Future.delayed(Duration(seconds: 3));
     if (supabase.auth.currentSession == null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Intro()),
-      );
+      if(mounted){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Intro()),
+        );
+      }
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
-      );
+      if(mounted){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
+        );
+      }
     }
   }
 
