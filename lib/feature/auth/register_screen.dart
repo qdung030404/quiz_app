@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quiz_app/main.dart';
+import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'package:quiz_app/core/service/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        MaterialPageRoute(builder: (_) => const MainScreen()),
         (_) => false,
       );
     } else {

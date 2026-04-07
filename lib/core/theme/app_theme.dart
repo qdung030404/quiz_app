@@ -112,19 +112,19 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: Colors.black),
-      titleTextStyle: TextStyle(color: Colors.black, fontSize: 18),
+      iconTheme: IconThemeData(color: Color(0xFF0C0630)),
+      titleTextStyle: TextStyle(color: Color(0xFF0C0630), fontSize: 18),
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
-      bodyMedium: TextStyle(color: Colors.black),
-      titleMedium: TextStyle(color: Colors.black),
-      headlineSmall: TextStyle(color: Colors.black),
+      bodyLarge: TextStyle(color: Color(0xFF0C0630)),
+      bodyMedium: TextStyle(color: Color(0xFF0C0630)),
+      titleMedium: TextStyle(color: Color(0xFF0C0630)),
+      headlineSmall: TextStyle(color: Color(0xFF0C0630)),
     ),
-    iconTheme: const IconThemeData(color: Colors.black),
+    iconTheme: const IconThemeData(color: Color(0xFF0C0630)),
     listTileTheme: const ListTileThemeData(
-      iconColor: Colors.black,
-      textColor: Colors.black,
+      iconColor:Color(0xFF0C0630),
+      textColor: Color(0xFF0C0630),
     ),
     dividerTheme: DividerThemeData(
       color: Colors.grey.shade300,
@@ -137,7 +137,7 @@ class AppTheme {
   static final darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: Colors.black,
+    scaffoldBackgroundColor: Color(0xFF0C0630),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,

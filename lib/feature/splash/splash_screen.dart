@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/feature/intro/intro.dart';
-import 'package:quiz_app/main.dart';
+import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(mounted){
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyHomePage(title: 'home')),
+          MaterialPageRoute(builder: (_) => const MainScreen()),
         );
       }
     }

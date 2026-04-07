@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quiz_app/core/service/auth_service.dart';
 import 'package:quiz_app/feature/auth/login_screen.dart';
 import 'package:quiz_app/feature/auth/register_screen.dart';
-import 'package:quiz_app/main.dart';
+import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
 
 class Intro extends StatefulWidget {
   const Intro({super.key});
@@ -25,7 +25,7 @@ class _IntroState extends State<Intro> {
     if (result.success) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        MaterialPageRoute(builder: (_) => const MainScreen()),
         (_) => false,
       );
     } else {

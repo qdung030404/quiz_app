@@ -8,6 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'core/theme/app_theme.dart';
 import 'feature/auth/reset_password_screen.dart';
+import 'feature/bottom_navigation_bar/bottom_navigation_bar.dart';
 import 'feature/intro/intro.dart';
 import 'feature/splash/splash_screen.dart';
 

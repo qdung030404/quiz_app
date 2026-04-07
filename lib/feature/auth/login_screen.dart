@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quiz_app/core/service/auth_service.dart';
 import 'package:quiz_app/feature/auth/forgot_password.dart';
-import 'package:quiz_app/main.dart';
+import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
 
 import 'package:quiz_app/core/theme/app_color.dart';
 
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result.success) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        MaterialPageRoute(builder: (_) => const MainScreen()),
         (_) => false,
       );
     } else {
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result.success) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (_) => MyHomePage(title: 'home')),
+        MaterialPageRoute(builder: (_) => const MainScreen()),
         (_) => false,
       );
     } else {
