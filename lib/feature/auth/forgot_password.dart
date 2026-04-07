@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quiz_app/service/auth_service.dart';
+import 'package:quiz_app/core/service/auth_service.dart';
+import 'package:quiz_app/core/theme/app_color.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -57,21 +58,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0C0630),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(
           'Quên mật khẩu',
           style: TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20.sp,
           ),
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: LayoutBuilder(
@@ -88,25 +87,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     children: [
                       SizedBox(height: 20),
                       TextFormField(
-                        style: const TextStyle(color: Colors.white),
                         controller: email,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xff9181F4),
+                          fillColor: AppColor.fillColor(context),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 16.h,
                           ),
                           labelText: 'Email ',
                           labelStyle: TextStyle(
-                            color: Colors.white,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                            borderSide: BorderSide(
+                              color: AppColor.borderColor(context),
                               width: 2.0,
                             ),
                           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quiz_app/main.dart';
-import 'package:quiz_app/service/auth_service.dart';
+import 'package:quiz_app/core/service/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -81,14 +81,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0C0630),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(
           'Đăng ký',
           style: TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20.sp,
           ),
@@ -109,26 +107,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 SizedBox(height: 32),
                 TextFormField(
-                  style: const TextStyle(color: Colors.white),
                   controller: email,
                   validator: emailValidator,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xff9181F4),
+                    fillColor: Theme.of(context).brightness == Brightness.dark
+                        ? Color(0xff9181F4)
+                        : Colors.grey.shade100,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16.h,
                     ),
                     labelText: 'Email',
                     labelStyle: TextStyle(
-                      color: Colors.white,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: const BorderSide(
-                        color: Colors.white,
                         width: 2.0,
                       ),
                     ),
@@ -146,21 +143,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validator: passwordValidator,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xff9181F4),
+                    fillColor: Theme.of(context).brightness == Brightness.dark
+                        ? Color(0xff9181F4)
+                        : Colors.grey.shade100,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 16.h,
                     ),
                     labelText: 'Mật Khẩu',
                     labelStyle: TextStyle(
-                      color: Colors.white,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscuredPassword ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.white70,
                       ),
                       onPressed: () => setState(() => _obscuredPassword = !_obscuredPassword),
                     ),

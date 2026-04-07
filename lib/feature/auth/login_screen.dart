@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiz_app/service/auth_service.dart';
+import 'package:quiz_app/core/service/auth_service.dart';
 import 'package:quiz_app/feature/auth/forgot_password.dart';
 import 'package:quiz_app/main.dart';
+
+import 'package:quiz_app/core/theme/app_color.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -83,21 +85,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0C0630),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(
           'Đăng nhập',
           style: TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20.sp,
           ),
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: LayoutBuilder(
@@ -118,21 +118,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: email,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xff9181F4),
+                          fillColor: AppColor.fillColor(context),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 16.h,
                           ),
                           labelText: 'Email',
                           labelStyle: TextStyle(
-                            color: Colors.white,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                            borderSide: BorderSide(
+                              color: AppColor.borderColor(context),
                               width: 2.0,
                             ),
                           ),
@@ -149,21 +148,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: _obscuredPassword,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: Color(0xff9181F4),
+                          fillColor: AppColor.fillColor(context),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 16.h,
                           ),
                           labelText: 'Mật Khẩu',
                           labelStyle: TextStyle(
-                            color: Colors.white,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                              color: Colors.white,
+                            borderSide: BorderSide(
+                              color: AppColor.borderColor(context),
                               width: 2.0,
                             ),
                           ),
@@ -191,7 +189,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Đăng nhập',
                             style: TextStyle(
-                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16.sp,
                             ),
@@ -214,7 +211,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
                             ),
                           ),
                         ),

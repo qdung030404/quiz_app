@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quiz_app/service/auth_service.dart';
+import 'package:quiz_app/core/service/auth_service.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -55,21 +55,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0C0630),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(
           'Đặt lại mật khẩu',
           style: TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 20.sp,
           ),
         ),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: Padding(
@@ -81,7 +79,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             Text(
               'Nhập mật khẩu mới',
               style: TextStyle(
-                color: Colors.white70,
                 fontSize: 14.sp,
               ),
             ),
@@ -148,14 +145,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
-                              color: Colors.white,
                               strokeWidth: 2,
                             ),
                           )
                         : Text(
                             'Cập nhật mật khẩu',
                             style: TextStyle(
-                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16.sp,
                             ),
