@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiz_app/feature/auth/auth_service.dart';
+import 'package:quiz_app/service/auth_service.dart';
 import 'package:quiz_app/feature/auth/login_screen.dart';
 import 'package:quiz_app/feature/auth/register_screen.dart';
 import 'package:quiz_app/main.dart';

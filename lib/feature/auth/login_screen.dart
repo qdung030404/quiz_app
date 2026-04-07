@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiz_app/feature/auth/auth_service.dart';
+import 'package:quiz_app/service/auth_service.dart';
 import 'package:quiz_app/feature/auth/forgot_password.dart';
 import 'package:quiz_app/main.dart';
 
@@ -17,8 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final password = TextEditingController();
   final _authService = AuthService();
 
-  final bool _obscuredPassword = true;
+  bool _obscuredPassword = true;
   bool isFormValid = false;
+  bool isLoading = false;
 
   void _updateFormValidStatus() {
     setState(() {
@@ -41,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signIn() async {
+    setState(() => isLoading = true);
     final result = await _authService.signIn(
       email: email.text,
       password: password.text,
@@ -61,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithGoogle() async {
+    setState(() => isLoading = true);
     final result = await _authService.signInWithGoogle();
     if (!mounted) return;
     if (result.success) {
@@ -171,6 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 20),
+                      isLoading ? CircularProgressIndicator() :
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -216,6 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const Spacer(),
+                      isLoading ? CircularProgressIndicator() :
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(

@@ -63,7 +63,6 @@ class AuthService {
         success: response.session != null,
         user: response.user,
         session: response.session,
-        // session == null có nghĩa là cần xác nhận email
       );
     } on AuthException catch (e) {
       return AuthResult(success: false, errorMessage: e.message);
