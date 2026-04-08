@@ -33,7 +33,7 @@ class HomeTab extends StatelessWidget {
                             borderRadius: BorderRadius.circular(25.r),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black. withOpacity(0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),
@@ -67,9 +67,30 @@ class HomeTab extends StatelessWidget {
                         final profile = snapshot.data!.first;
                         return GestureDetector(
                           onTap: () {},
-                          child: CircleAvatar(
-                            radius: 25.r,
-                            backgroundImage: NetworkImage(profile['avatar_url']),
+                          child: Container(
+                            width: 50.sp,
+                            height: 50.sp,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: ClipOval(
+                              child: Image.network(
+                                profile['avatar_url'] ?? '',
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(
+                                    Icons.person,
+                                    color: Colors.deepPurple,
+                                    size: 30.sp,
+                                  );
+                                },
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const Center(child: CircularProgressIndicator());
+                                },
+                              ),
+                            ),
                           ),
                         );
                       },
