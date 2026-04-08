@@ -1,90 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiz_app/core/service/auth_service.dart';
-import 'package:quiz_app/feature/auth/forgot_password.dart';
-import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
+import 'package:get/get.dart';
+import '../controller/auth_controller.dart';
+import 'forgot_password.dart';
+import '../../../core/theme/app_color.dart';
 
-import 'package:quiz_app/core/theme/app_color.dart';
-
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final email = TextEditingController();
-  final password = TextEditingController();
-  final _authService = AuthService();
-
-  bool _obscuredPassword = true;
-  bool isFormValid = false;
-  bool emailSignInLoading = false;
-  bool googleSignInLoading = false;
-
-  void _updateFormValidStatus() {
-    setState(() {
-      isFormValid = email.text.isNotEmpty && password.text.isNotEmpty;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    email.addListener(_updateFormValidStatus);
-    password.addListener(_updateFormValidStatus);
-  }
-
-  @override
-  void dispose() {
-    email.dispose();
-    password.dispose();
-    super.dispose();
-  }
-
-  Future<void> signIn() async {
-    setState(() => emailSignInLoading = true);
-    final result = await _authService.signIn(
-      email: email.text,
-      password: password.text,
-    );
-    if (!mounted) return;
-    if (result.success) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MainScreen()),
-        (_) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(result.errorMessage ?? 'Đăng nhập thất bại'),
-        backgroundColor: Colors.red,
-      ));
-    }
-  }
-
-  Future<void> signInWithGoogle() async {
-    setState(() => googleSignInLoading = true);
-    final result = await _authService.signInWithGoogle();
-    if (!mounted) return;
-    if (result.success) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MainScreen()),
-        (_) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(result.errorMessage ?? 'Đăng nhập Google thất bại'),
-        backgroundColor: Colors.red,
-      ));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController controller = Get.put(AuthController());
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -97,8 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back),
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: LayoutBuilder(
@@ -108,14 +36,14 @@ class _LoginScreenState extends State<LoginScreen> {
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: IntrinsicHeight(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
-                        controller: email,
+                        controller: controller.emailController,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColor.fillColor(context),
@@ -141,10 +69,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 24),
-                      TextFormField(
-                        controller: password,
-                        obscureText: _obscuredPassword,
+                      const SizedBox(height: 24),
+                      Obx(() => TextFormField(
+                        controller: controller.passwordController,
+                        obscureText: controller.obscuredPassword.value,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: AppColor.fillColor(context),
@@ -159,9 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscuredPassword ? Icons.visibility_off : Icons.visibility,
+                              controller.obscuredPassword.value 
+                                  ? Icons.visibility_off 
+                                  : Icons.visibility,
                             ),
-                            onPressed: () => setState(() => _obscuredPassword = !_obscuredPassword),
+                            onPressed: () => controller.togglePasswordVisibility(),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
@@ -175,10 +105,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderSide: const BorderSide(color: Colors.white),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      emailSignInLoading ? CircularProgressIndicator() :
-                      SizedBox(
+                      )),
+                      const SizedBox(height: 20),
+                      Obx(() => controller.emailSignInLoading.value 
+                          ? const Center(child: CircularProgressIndicator()) 
+                          : SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -190,7 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          onPressed: isFormValid ? () => signIn() : null,
+                          onPressed: controller.isFormValid.value 
+                              ? () => controller.signIn() 
+                              : null,
                           child: Text(
                             'Đăng nhập',
                             style: TextStyle(
@@ -200,17 +133,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20),
+                      )),
+                      const SizedBox(height: 20),
                       Center(
                         child: TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotPasswordScreen(),
-                              ),
-                            );
+                            Get.to(() => const ForgotPasswordScreen());
                           },
                           child: Text(
                             'Quên mật khẩu',
@@ -222,19 +150,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const Spacer(),
-                      googleSignInLoading ? CircularProgressIndicator() :
-                      SizedBox(
+                      Obx(() => controller.googleSignInLoading.value 
+                          ? const Center(child: CircularProgressIndicator()) 
+                          : SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xff2A1896),
+                            backgroundColor: const Color(0xff2A1896),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          onPressed: () => signInWithGoogle(),
-                          icon: FaIcon(
+                          onPressed: () => controller.signInWithGoogle(),
+                          icon: const FaIcon(
                             FontAwesomeIcons.google,
                             color: Colors.white,
                             size: 24,
@@ -248,8 +177,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20),
+                      )),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

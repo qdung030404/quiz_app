@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CreateBottomSheet extends StatelessWidget {
   const CreateBottomSheet({super.key});
@@ -33,14 +34,14 @@ class CreateBottomSheet extends StatelessWidget {
             icon: Icons.quiz_outlined,
             title: 'Tạo Quiz',
             subtitle: 'Tạo bộ câu hỏi mới',
-            onTap: () => Navigator.pop(context),
+            onTap: () => Get.back(),
           ),
           const SizedBox(height: 12),
           CreateOption(
             icon: Icons.folder_outlined,
             title: 'Tạo Thư mục',
             subtitle: 'Nhóm các quiz lại với nhau',
-            onTap: () => Navigator.pop(context),
+            onTap: () => Get.back(),
           ),
           SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 24),
         ],

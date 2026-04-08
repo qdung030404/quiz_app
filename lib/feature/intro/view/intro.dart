@@ -1,43 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quiz_app/core/service/auth_service.dart';
-import 'package:quiz_app/feature/auth/login_screen.dart';
-import 'package:quiz_app/feature/auth/register_screen.dart';
-import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
+import 'package:get/get.dart';
+import '../controller/intro_controller.dart';
 
-class Intro extends StatefulWidget {
+class Intro extends StatelessWidget {
   const Intro({super.key});
 
   @override
-  State<Intro> createState() => _IntroState();
-}
-
-class _IntroState extends State<Intro> {
-  final _authService = AuthService();
-  bool _loadingGoogle = false;
-
-  Future<void> _signInWithGoogle() async {
-    setState(() => _loadingGoogle = true);
-    final result = await _authService.signInWithGoogle();
-    if (!mounted) return;
-    setState(() => _loadingGoogle = false);
-    if (result.success) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MainScreen()),
-        (_) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(result.errorMessage ?? 'Đăng nhập Google thất bại'),
-        backgroundColor: Colors.red,
-      ));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final IntroController controller = Get.put(IntroController());
+
     return Scaffold(
       backgroundColor: const Color(0xFF0C0630),
       body: SizedBox(
@@ -66,7 +39,7 @@ class _IntroState extends State<Intro> {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton.icon(
+                    child: Obx(() => ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff2A1896),
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -74,8 +47,10 @@ class _IntroState extends State<Intro> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      onPressed: _loadingGoogle ? null : _signInWithGoogle,
-                      icon: _loadingGoogle
+                      onPressed: controller.loadingGoogle.value 
+                          ? null 
+                          : () => controller.signInWithGoogle(),
+                      icon: controller.loadingGoogle.value
                           ? const SizedBox(
                               width: 20,
                               height: 20,
@@ -94,7 +69,7 @@ class _IntroState extends State<Intro> {
                           fontSize: 16.sp,
                         ),
                       ),
-                    ),
+                    )),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -107,14 +82,7 @@ class _IntroState extends State<Intro> {
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const RegisterScreen(),
-                          ),
-                        );
-                      },
+                      onPressed: () => controller.navigateToRegister(),
                       icon: const FaIcon(FontAwesomeIcons.envelope,
                           color: Colors.white, size: 24),
                       label: Text(
@@ -140,14 +108,7 @@ class _IntroState extends State<Intro> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const LoginScreen(),
-                            ),
-                          );
-                        },
+                        onPressed: () => controller.navigateToLogin(),
                         child: Text(
                           'Đăng Nhập',
                           style: TextStyle(

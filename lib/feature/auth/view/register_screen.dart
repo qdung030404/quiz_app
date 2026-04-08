@@ -1,85 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quiz_app/feature/bottom_navigation_bar/bottom_navigation_bar.dart';
-import 'package:quiz_app/core/service/auth_service.dart';
+import 'package:get/get.dart';
+import '../controller/auth_controller.dart';
 
-class RegisterScreen extends StatefulWidget {
+class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final email = TextEditingController();
-  final password = TextEditingController();
-  final _authService = AuthService();
-
-  bool _obscuredPassword = false;
-  bool isFormValid = false;
-  bool isLoading = false;
-
-  Future<void> register() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => isLoading = true);
-    final result = await _authService.signUp(
-      email: email.text,
-      password: password.text,
-    );
-    if (!mounted) return;
-    setState(() => isLoading = false);
-    if (result.success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Đăng ký thành công'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
-      );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const MainScreen()),
-        (_) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result.errorMessage ?? 'Đăng ký thất bại'),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 2),
-        ),
-      );
-    }
-  }
-
-  String? emailValidator(String? value) => _authService.validateEmail(value);
-
-  String? passwordValidator(String? value) =>
-      _authService.validatePassword(value);
-
-  void _updateFormValidStatus() {
-    setState(() {
-      isFormValid = email.text.isNotEmpty && password.text.isNotEmpty;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    email.addListener(_updateFormValidStatus);
-    password.addListener(_updateFormValidStatus);
-  }
-
-  @override
-  void dispose() {
-    email.dispose();
-    password.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final AuthController controller = Get.find<AuthController>();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -92,27 +22,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back),
         ),
       ),
       body: Form(
-        key: _formKey,
+        key: controller.formKey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 TextFormField(
-                  controller: email,
-                  validator: emailValidator,
+                  controller: controller.emailController,
+                  validator: controller.emailValidator,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Theme.of(context).brightness == Brightness.dark
-                        ? Color(0xff9181F4)
+                        ? const Color(0xff9181F4)
                         : Colors.grey.shade100,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 16,
@@ -135,15 +65,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24),
-                TextFormField(
-                  controller: password,
-                  obscureText: _obscuredPassword,
-                  validator: passwordValidator,
+                const SizedBox(height: 24),
+                Obx(() => TextFormField(
+                  controller: controller.passwordController,
+                  obscureText: controller.obscuredPassword.value,
+                  validator: controller.passwordValidator,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Theme.of(context).brightness == Brightness.dark
-                        ? Color(0xff9181F4)
+                        ? const Color(0xff9181F4)
                         : Colors.grey.shade100,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 16,
@@ -156,9 +86,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscuredPassword ? Icons.visibility_off : Icons.visibility,
+                        controller.obscuredPassword.value 
+                            ? Icons.visibility_off 
+                            : Icons.visibility,
                       ),
-                      onPressed: () => setState(() => _obscuredPassword = !_obscuredPassword),
+                      onPressed: () => controller.togglePasswordVisibility(),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -172,9 +104,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderSide: const BorderSide(color: Colors.white),
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                SizedBox(
+                )),
+                const SizedBox(height: 20),
+                Obx(() => SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -186,8 +118,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    onPressed: (isFormValid && !isLoading) ? () => register() : null,
-                    child: isLoading
+                    onPressed: (controller.isFormValid.value && !controller.registerLoading.value) 
+                        ? () => controller.signUp() 
+                        : null,
+                    child: controller.registerLoading.value
                         ? const SizedBox(
                             height: 20,
                             width: 20,
@@ -205,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                   ),
-                ),
+                )),
               ],
             ),
           ),

@@ -18,14 +18,13 @@ class ThemeService extends GetxController {
     return this;
   }
 
-  bool get isSystemMode => _prefs.getBool(_systemKey) ?? false;
+  bool get isSystemMode => _prefs.getBool(_systemKey) ?? true;
 
-  bool get isAutoChange => _prefs.getBool(_autoKey) ?? true;
+  bool get isAutoChange => _prefs.getBool(_autoKey) ?? false;
 
   bool get isDarkMode {
     if (isSystemMode) {
-      final brightness = Get.mediaQuery.platformBrightness;
-      return brightness == Brightness.dark;
+      return Get.isPlatformDarkMode;
     }
     if (isAutoChange) {
       final hour = DateTime
