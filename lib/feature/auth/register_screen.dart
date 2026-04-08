@@ -137,7 +137,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(height: 24),
                 TextFormField(
-                  style: const TextStyle(color: Colors.white),
                   controller: password,
                   obscureText: _obscuredPassword,
                   validator: passwordValidator,

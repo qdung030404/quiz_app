@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:quiz_app/data/models/user_model.dart';
+import 'package:quiz_app/core/service/auth_service.dart';
+import 'package:quiz_app/core/widgets/base_screen.dart';
 import 'package:quiz_app/data/repositories/profile_repository.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../intro/intro.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -12,11 +16,12 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
   final _profileRepository = ProfileRepository();
+  final _authservice = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
+    return BaseScreen(
+      child: CustomScrollView(
         slivers: [
           SliverAppBar(
             floating: true,
@@ -69,10 +74,9 @@ class _HomeTabState extends State<HomeTab> {
                         return CircularProgressIndicator();
                       }
                       final profile = snapshot.data!.first;
-                      return Column(
-                        children: [
-                          CircleAvatar(backgroundImage: NetworkImage(profile['avatar_url'])),
-                        ],
+                      return GestureDetector(
+                        onTap: (){},
+                        child: CircleAvatar(backgroundImage: NetworkImage(profile['avatar_url'])),
                       );
                     }),
                   ),

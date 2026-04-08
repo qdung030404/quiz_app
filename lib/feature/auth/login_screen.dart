@@ -21,7 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _obscuredPassword = true;
   bool isFormValid = false;
-  bool isLoading = false;
+  bool emailSignInLoading = false;
+  bool googleSignInLoading = false;
 
   void _updateFormValidStatus() {
     setState(() {
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signIn() async {
-    setState(() => isLoading = true);
+    setState(() => emailSignInLoading = true);
     final result = await _authService.signIn(
       email: email.text,
       password: password.text,
@@ -65,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signInWithGoogle() async {
-    setState(() => isLoading = true);
+    setState(() => googleSignInLoading = true);
     final result = await _authService.signInWithGoogle();
     if (!mounted) return;
     if (result.success) {
@@ -114,7 +115,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       SizedBox(height: 20),
                       TextFormField(
-                        style: const TextStyle(color: Colors.white),
                         controller: email,
                         decoration: InputDecoration(
                           filled: true,
@@ -143,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(height: 24),
                       TextFormField(
-                        style: const TextStyle(color: Colors.white),
                         controller: password,
                         obscureText: _obscuredPassword,
                         decoration: InputDecoration(
@@ -157,6 +156,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           labelStyle: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscuredPassword ? Icons.visibility_off : Icons.visibility,
+                            ),
+                            onPressed: () => setState(() => _obscuredPassword = !_obscuredPassword),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
@@ -172,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      isLoading ? CircularProgressIndicator() :
+                      emailSignInLoading ? CircularProgressIndicator() :
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -189,6 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Đăng nhập',
                             style: TextStyle(
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 16.sp,
                             ),
@@ -216,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const Spacer(),
-                      isLoading ? CircularProgressIndicator() :
+                      googleSignInLoading ? CircularProgressIndicator() :
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton.icon(
