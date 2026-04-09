@@ -23,9 +23,10 @@ class AppColor {
   static LinearGradient backgroundGradient(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? const LinearGradient(
-            colors: [Color(0xFF1A1A2E), Color(0xFF16213E)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+            colors: [Color(0xFF1A1A2E), Color(0xFF211374)],
+            stops: [0.7, 1.0],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
           )
         : const LinearGradient(
             colors: [Colors.white,Color(0xFFC5C5FF)],
