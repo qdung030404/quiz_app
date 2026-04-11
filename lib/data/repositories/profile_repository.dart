@@ -31,10 +31,10 @@ class ProfileRepository {
 
       if (lastLoginStr == null || (response['streak_count'] ?? 0) == 0) {
         // Lần đầu đăng nhập hoặc dữ liệu streak đang là 0
-        await _supabase.from('profiles').update({
-          'streak_count': 1,
-          'last_login_at': now.toIso8601String(),
-        }).eq('id', userId);
+        await _supabase
+            .from('profiles')
+            .update({'streak_count': 1, 'last_login_at': now.toIso8601String()})
+            .eq('id', userId);
         return;
       }
 
@@ -44,16 +44,19 @@ class ProfileRepository {
 
       if (difference == 1) {
         // Là ngày tiếp theo
-        await _supabase.from('profiles').update({
-          'streak_count': currentStreak + 1,
-          'last_login_at': now.toIso8601String(),
-        }).eq('id', userId);
+        await _supabase
+            .from('profiles')
+            .update({
+              'streak_count': currentStreak + 1,
+              'last_login_at': now.toIso8601String(),
+            })
+            .eq('id', userId);
       } else if (difference > 1) {
         // Bị ngắt quãng
-        await _supabase.from('profiles').update({
-          'streak_count': 1,
-          'last_login_at': now.toIso8601String(),
-        }).eq('id', userId);
+        await _supabase
+            .from('profiles')
+            .update({'streak_count': 1, 'last_login_at': now.toIso8601String()})
+            .eq('id', userId);
       }
       // Nếu difference == 0 (vẫn trong cùng ngày) thì không làm gì
     } catch (e) {

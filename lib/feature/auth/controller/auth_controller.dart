@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../core/service/auth_service.dart';
 import '../../bottom_navigation_bar/view/bottom_navigation_bar.dart';
 import '../../intro/view/intro.dart';
@@ -8,7 +9,7 @@ class AuthController extends GetxController {
   final AuthService _authService = AuthService();
 
   final formKey = GlobalKey<FormState>();
-  
+
   // Observable states
   var emailSignInLoading = false.obs;
   var googleSignInLoading = false.obs;
@@ -49,7 +50,9 @@ class AuthController extends GetxController {
   }
 
   String? emailValidator(String? value) => _authService.validateEmail(value);
-  String? passwordValidator(String? value) => _authService.validatePassword(value);
+
+  String? passwordValidator(String? value) =>
+      _authService.validatePassword(value);
 
   Future<void> signIn() async {
     emailSignInLoading.value = true;
@@ -62,20 +65,37 @@ class AuthController extends GetxController {
     if (result.success) {
       Get.offAll(() => const MainScreen());
     } else {
-      Get.snackbar('Lỗi', result.errorMessage ?? 'Đăng nhập thất bại', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Lỗi',
+        result.errorMessage ?? 'Đăng nhập thất bại',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
   Future<void> sendPasswordReset() async {
     forgotPasswordLoading.value = true;
-    final result = await _authService.sendPasswordReset(email: emailController.text);
+    final result = await _authService.sendPasswordReset(
+      email: emailController.text,
+    );
     forgotPasswordLoading.value = false;
 
     if (result.success) {
       Get.back();
-      Get.snackbar('Thành công', 'Vui lòng kiểm tra email để đặt lại mật khẩu', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar(
+        'Thành công',
+        'Vui lòng kiểm tra email để đặt lại mật khẩu',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
     } else {
-      Get.snackbar('Lỗi', result.errorMessage ?? 'Có lỗi xảy ra', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Lỗi',
+        result.errorMessage ?? 'Có lỗi xảy ra',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
@@ -88,17 +108,27 @@ class AuthController extends GetxController {
     updatePasswordLoading.value = false;
 
     if (result.success) {
-      Get.snackbar('Thành công', 'Đặt lại mật khẩu thành công!', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar(
+        'Thành công',
+        'Đặt lại mật khẩu thành công!',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
       await _authService.signOut();
       Get.offAll(() => const Intro());
     } else {
-      Get.snackbar('Lỗi', result.errorMessage ?? 'Không thể cập nhật mật khẩu', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Lỗi',
+        result.errorMessage ?? 'Không thể cập nhật mật khẩu',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 
   Future<void> signUp() async {
     if (!formKey.currentState!.validate()) return;
-    
+
     registerLoading.value = true;
     final result = await _authService.signUp(
       email: emailController.text,
@@ -107,10 +137,20 @@ class AuthController extends GetxController {
     registerLoading.value = false;
 
     if (result.success) {
-      Get.snackbar('Thành công', 'Đăng ký thành công', backgroundColor: Colors.green, colorText: Colors.white);
+      Get.snackbar(
+        'Thành công',
+        'Đăng ký thành công',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
       Get.offAll(() => const MainScreen());
     } else {
-      Get.snackbar('Lỗi', result.errorMessage ?? 'Đăng ký thất bại', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Lỗi',
+        result.errorMessage ?? 'Đăng ký thất bại',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../core/service/auth_service.dart';
 import '../../auth/view/login_screen.dart';
 import '../../auth/view/register_screen.dart';
@@ -27,5 +28,6 @@ class IntroController extends GetxController {
   }
 
   void navigateToLogin() => Get.to(() => const LoginScreen());
+
   void navigateToRegister() => Get.to(() => const RegisterScreen());
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../Create/view/create_bottom_sheet.dart';
 
 class NavController extends GetxController {

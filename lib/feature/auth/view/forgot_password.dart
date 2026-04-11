@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../controller/auth_controller.dart';
+
 import '../../../core/theme/app_color.dart';
+import '../controller/auth_controller.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -17,10 +18,7 @@ class ForgotPasswordScreen extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Quên mật khẩu',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20.sp,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
         ),
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -68,35 +66,37 @@ class ForgotPasswordScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Obx(() => controller.forgotPasswordLoading.value 
-                          ? const Center(child: CircularProgressIndicator()) 
-                          : SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff2A1896),
-                            disabledBackgroundColor: Colors.grey,
-                            disabledForegroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          onPressed: controller.isFormValid.value 
-                              ? () => controller.sendPasswordReset() 
-                              : null,
-                          child: Text(
-                            'Xác nhận',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ),
-                      )),
+                      Obx(
+                        () => controller.forgotPasswordLoading.value
+                            ? const Center(child: CircularProgressIndicator())
+                            : SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xff2A1896),
+                                    disabledBackgroundColor: Colors.grey,
+                                    disabledForegroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                  ),
+                                  onPressed: controller.isFormValid.value
+                                      ? () => controller.sendPasswordReset()
+                                      : null,
+                                  child: Text(
+                                    'Xác nhận',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.sp,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                      ),
                     ],
                   ),
                 ),

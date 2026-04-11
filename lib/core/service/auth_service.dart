@@ -42,7 +42,10 @@ class AuthService {
     } on AuthException catch (e) {
       return AuthResult(success: false, errorMessage: e.message);
     } catch (_) {
-      return AuthResult(success: false, errorMessage: 'Email hoặc mật khẩu không đúng');
+      return AuthResult(
+        success: false,
+        errorMessage: 'Email hoặc mật khẩu không đúng',
+      );
     }
   }
 
@@ -103,7 +106,10 @@ class AuthService {
     } on AuthException catch (e) {
       return AuthResult(success: false, errorMessage: e.message);
     } catch (_) {
-      return AuthResult(success: false, errorMessage: 'Đăng nhập Google thất bại');
+      return AuthResult(
+        success: false,
+        errorMessage: 'Đăng nhập Google thất bại',
+      );
     }
   }
 
@@ -120,21 +126,25 @@ class AuthService {
     } on AuthException catch (e) {
       return AuthResult(success: false, errorMessage: e.message);
     } catch (_) {
-      return AuthResult(success: false, errorMessage: 'Có lỗi xảy ra, vui lòng thử lại');
+      return AuthResult(
+        success: false,
+        errorMessage: 'Có lỗi xảy ra, vui lòng thử lại',
+      );
     }
   }
 
   /// Cập nhật mật khẩu mới (sau khi reset)
   Future<AuthResult> updatePassword({required String newPassword}) async {
     try {
-      await _supabase.auth.updateUser(
-        UserAttributes(password: newPassword),
-      );
+      await _supabase.auth.updateUser(UserAttributes(password: newPassword));
       return const AuthResult(success: true);
     } on AuthException catch (e) {
       return AuthResult(success: false, errorMessage: e.message);
     } catch (_) {
-      return AuthResult(success: false, errorMessage: 'Không thể cập nhật mật khẩu');
+      return AuthResult(
+        success: false,
+        errorMessage: 'Không thể cập nhật mật khẩu',
+      );
     }
   }
 

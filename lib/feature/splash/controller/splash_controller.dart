@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../intro/view/intro.dart';
+
 import '../../bottom_navigation_bar/view/bottom_navigation_bar.dart';
+import '../../intro/view/intro.dart';
 
 class SplashController extends GetxController {
   final supabase = Supabase.instance.client;

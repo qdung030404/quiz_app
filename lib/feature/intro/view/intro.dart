@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+
 import '../controller/intro_controller.dart';
 
 class Intro extends StatelessWidget {
@@ -39,37 +40,42 @@ class Intro extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    child: Obx(() => ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff2A1896),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                    child: Obx(
+                      () => ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff2A1896),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
                         ),
-                      ),
-                      onPressed: controller.loadingGoogle.value 
-                          ? null 
-                          : () => controller.signInWithGoogle(),
-                      icon: controller.loadingGoogle.value
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
+                        onPressed: controller.loadingGoogle.value
+                            ? null
+                            : () => controller.signInWithGoogle(),
+                        icon: controller.loadingGoogle.value
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const FaIcon(
+                                FontAwesomeIcons.google,
                                 color: Colors.white,
-                                strokeWidth: 2,
+                                size: 24,
                               ),
-                            )
-                          : const FaIcon(FontAwesomeIcons.google,
-                              color: Colors.white, size: 24),
-                      label: Text(
-                        'Đăng nhập với Google',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.sp,
+                        label: Text(
+                          'Đăng nhập với Google',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.sp,
+                          ),
                         ),
                       ),
-                    )),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -83,8 +89,11 @@ class Intro extends StatelessWidget {
                         ),
                       ),
                       onPressed: () => controller.navigateToRegister(),
-                      icon: const FaIcon(FontAwesomeIcons.envelope,
-                          color: Colors.white, size: 24),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.envelope,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                       label: Text(
                         'Đăng ký với email',
                         style: TextStyle(
