@@ -107,7 +107,7 @@ class CreateFlashcardSetScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () => controller.addEmptyCard(),
           backgroundColor: Colors.deepPurpleAccent,
-          child: const Icon(Icons.add,),
+          child: const Icon(Icons.add),
         ),
       ),
     );

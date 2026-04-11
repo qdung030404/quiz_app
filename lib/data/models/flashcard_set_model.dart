@@ -25,14 +25,14 @@ class FlashCardSetModel {
       title: json['title'] as String,
       // cardCount thường được lấy thông qua câu query count() từ Supabase
       cardCount: json['flashcards_count'] ?? 0,
-      createdAt: json['created_at'] != null 
-          ? DateTime.parse(json['created_at']) 
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
           : DateTime.now(),
       // Ánh xạ danh sách thẻ bài nếu có đính kèm trong JSON
       cards: json['flashcards'] != null
           ? (json['flashcards'] as List)
-              .map((i) => FlashCardModel.formJson(i))
-              .toList()
+                .map((i) => FlashCardModel.formJson(i))
+                .toList()
           : null,
     );
   }

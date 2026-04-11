@@ -1,6 +1,6 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FlashcardRepository {
   final _supabase = Supabase.instance.client;
@@ -70,10 +70,7 @@ class FlashcardRepository {
 
       final response = await _supabase
           .from('flashcardset')
-          .insert({
-            'title': title,
-            'user_id': userId,
-          })
+          .insert({'title': title, 'user_id': userId})
           .select()
           .single();
 
@@ -103,12 +100,11 @@ class FlashcardRepository {
   /// 5b. Thêm nhiều Thẻ bài cùng lúc (Bulk Insert)
   Future<List<FlashCardModel>> addCards(List<FlashCardModel> cards) async {
     try {
-      final List<Map<String, dynamic>> data = cards.map((c) => c.toJson()).toList();
-      
-      final response = await _supabase
-          .from('flashcards')
-          .insert(data)
-          .select();
+      final List<Map<String, dynamic>> data = cards
+          .map((c) => c.toJson())
+          .toList();
+
+      final response = await _supabase.from('flashcards').insert(data).select();
 
       return (response as List)
           .map((json) => FlashCardModel.formJson(json))

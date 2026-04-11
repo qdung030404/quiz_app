@@ -12,7 +12,8 @@ class FlashCardDraft {
     TextEditingController? definition,
   }) : terminologyController = term ?? TextEditingController(),
        definitionController = definition ?? TextEditingController();
-  void dispose(){
+
+  void dispose() {
     terminologyController.dispose();
     definitionController.dispose();
   }
@@ -27,11 +28,10 @@ class FlashcardController extends GetxController {
 
   final isLoading = false.obs;
 
-
   @override
   void onInit() {
     super.onInit();
-    
+
     addEmptyCard();
     addEmptyCard();
   }
@@ -39,6 +39,7 @@ class FlashcardController extends GetxController {
   void addEmptyCard() {
     flashcardDrafts.add(FlashCardDraft());
   }
+
   void removeCard(int index) {
     if (flashcardDrafts.length > 2) {
       flashcardDrafts[index].dispose();
@@ -47,18 +48,22 @@ class FlashcardController extends GetxController {
       Get.snackbar('Thông báo', 'Bộ thẻ cần tối thiểu 2 thẻ bài');
     }
   }
+
   Future<void> createFlashcardSet() async {
     final title = titleController.text.trim();
     if (title.isEmpty) {
       Get.snackbar('Lỗi', 'Tiêu đề không được bỏ trống');
       return;
     }
-    
+
     // Kiểm tra dữ liệu hợp lệ cho tất cả các thẻ
     for (var draft in flashcardDrafts) {
-      if (draft.terminologyController.text.trim().isEmpty || 
+      if (draft.terminologyController.text.trim().isEmpty ||
           draft.definitionController.text.trim().isEmpty) {
-        Get.snackbar('Lỗi', 'Vui lòng nhập đầy đủ thuật ngữ và định nghĩa cho tất cả các thẻ');
+        Get.snackbar(
+          'Lỗi',
+          'Vui lòng nhập đầy đủ thuật ngữ và định nghĩa cho tất cả các thẻ',
+        );
         return;
       }
     }
@@ -72,10 +77,10 @@ class FlashcardController extends GetxController {
         Get.snackbar('Lỗi', 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại');
         return;
       }
-      
+
       // 1. Tạo Bộ thẻ (Set)
       final newSet = await _flashcardRepository.createSet(title);
-      
+
       if (newSet != null && newSet.id != null) {
         // 2. Chuyển đổi Draft sang Model và truyền userId vào từng thẻ
         final List<FlashCardModel> cardsToSave = flashcardDrafts.map((draft) {
@@ -92,9 +97,15 @@ class FlashcardController extends GetxController {
 
         if (savedCards.isNotEmpty) {
           Get.back(); // Quay lại màn hình trước đó
-          Get.snackbar('Thành công', 'Đã tạo học phần và ${savedCards.length} thẻ bài thành công!');
+          Get.snackbar(
+            'Thành công',
+            'Đã tạo học phần và ${savedCards.length} thẻ bài thành công!',
+          );
         } else {
-          Get.snackbar('Lỗi', 'Không thể lưu các thẻ bài, vui lòng kiểm tra lại dữ liệu');
+          Get.snackbar(
+            'Lỗi',
+            'Không thể lưu các thẻ bài, vui lòng kiểm tra lại dữ liệu',
+          );
         }
       } else {
         Get.snackbar('Lỗi', 'Không thể tạo bộ thẻ, vui lòng thử lại');

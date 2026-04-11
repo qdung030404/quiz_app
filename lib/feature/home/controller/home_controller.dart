@@ -1,19 +1,17 @@
 import 'package:get/get.dart';
-import '../../intro/view/intro.dart';
-import '../../../core/service/auth_service.dart';
-import '../../../data/repositories/profile_repository.dart';
+import 'package:quiz_app/data/repositories/profile_repository.dart';
+import 'package:quiz_app/feature/profile/view/profile_screen.dart';
 
 class HomeController extends GetxController {
   final _profileRepository = ProfileRepository();
-  final _authService = AuthService();
+  late Stream<List<Map<String, dynamic>>> profileStream;
 
-  // Streams or Observables for profile data
-  Stream<List<Map<String, dynamic>>> getProfileStream() {
-    return _profileRepository.watchCurrentUserProfile();
+  @override
+  void onInit() {
+    super.onInit();
+    _profileRepository.updateStreak();
+    profileStream = _profileRepository.watchCurrentUserProfile();
   }
 
-  Future<void> signOut() async {
-    await _authService.signOut();
-    Get.offAll(() => const Intro());
-  }
+  void goToProfile() => Get.to(() => const ProfileScreen());
 }

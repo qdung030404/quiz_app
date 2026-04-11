@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../controller/home_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/widgets/base_screen.dart';
+import '../controller/home_controller.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final HomeController controller = Get.put(HomeController());
+    final controller = Get.put(HomeController());
 
     return BaseScreen(
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
             floating: true,
-            expandedHeight: 80.sp,
+            expandedHeight: 120.sp,
             toolbarHeight: 80.sp,
+            backgroundColor: Colors.transparent,
             flexibleSpace: FlexibleSpaceBar(
               background: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
@@ -25,29 +28,24 @@ class HomeTab extends StatelessWidget {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => controller.signOut(),
+                        onTap: () {},
                         child: Container(
                           height: 50.sp,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(25.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black. withOpacity(0.1),
-                                blurRadius: 10,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                            ),
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 16.w),
                           child: Row(
                             children: [
-                              const Icon(Icons.logout, color: Colors.deepPurple),
+                              const Icon(Icons.search),
                               SizedBox(width: 10.w),
                               Text(
-                                "Đăng xuất",
-                                style: TextStyle(
-                                  color: Colors.deepPurple,
+                                "Tìm kiếm...",
+                                style: GoogleFonts.beVietnamPro(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.sp,
                                 ),
@@ -59,14 +57,14 @@ class HomeTab extends StatelessWidget {
                     ),
                     SizedBox(width: 15.w),
                     StreamBuilder<List<Map<String, dynamic>>>(
-                      stream: controller.getProfileStream(),
+                      stream: controller.profileStream,
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return const CircularProgressIndicator();
                         }
                         final profile = snapshot.data!.first;
                         return GestureDetector(
-                          onTap: () {},
+                          onTap: () => controller.goToProfile(),
                           child: Container(
                             width: 50.sp,
                             height: 50.sp,
@@ -85,10 +83,13 @@ class HomeTab extends StatelessWidget {
                                     size: 30.sp,
                                   );
                                 },
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(child: CircularProgressIndicator());
-                                },
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    },
                               ),
                             ),
                           ),

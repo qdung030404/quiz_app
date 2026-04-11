@@ -29,8 +29,8 @@ class FlashCardModel {
       terminologyLanguage: json['terminology_language'] as String? ?? 'en',
       definition: json['definition'] as String,
       definitionLanguage: json['definition_language'] as String? ?? 'vi',
-      createdAt: json['created_at'] != null 
-          ? DateTime.parse(json['created_at']) 
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
           : null,
     );
   }
