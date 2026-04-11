@@ -27,9 +27,7 @@ class ThemeService extends GetxController {
       return Get.isPlatformDarkMode;
     }
     if (isAutoChange) {
-      final hour = DateTime
-          .now()
-          .hour;
+      final hour = DateTime.now().hour;
       return hour >= 18 || hour < 6;
     }
     return _prefs.getBool(_key) ?? true;
@@ -92,9 +90,7 @@ class ThemeService extends GetxController {
   }
 
   void _applyTimeChange() {
-    final hour = DateTime
-        .now()
-        .hour;
+    final hour = DateTime.now().hour;
     bool shouldBeDark = hour > 18 || hour < 6;
     Get.changeThemeMode(shouldBeDark ? ThemeMode.dark : ThemeMode.light);
     _saveThemeToBox(shouldBeDark);
@@ -121,15 +117,11 @@ class AppTheme {
     ),
     iconTheme: const IconThemeData(color: Color(0xFF0C0630)),
     listTileTheme: const ListTileThemeData(
-      iconColor:Color(0xFF0C0630),
+      iconColor: Color(0xFF0C0630),
       textColor: Color(0xFF0C0630),
     ),
-    dividerTheme: DividerThemeData(
-      color: Colors.grey.shade300,
-    ),
-    bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Colors.white,
-    ),
+    dividerTheme: DividerThemeData(color: Colors.grey.shade300),
+    bottomSheetTheme: const BottomSheetThemeData(backgroundColor: Colors.white),
   );
 
   static final darkTheme = ThemeData(
@@ -152,9 +144,7 @@ class AppTheme {
       iconColor: Colors.white,
       textColor: Colors.white,
     ),
-    dividerTheme: DividerThemeData(
-      color: Colors.grey.shade800,
-    ),
+    dividerTheme: DividerThemeData(color: Colors.grey.shade800),
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: Colors.grey.shade900,
     ),
