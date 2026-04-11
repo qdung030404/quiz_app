@@ -29,7 +29,7 @@ class AppColor {
             end: Alignment.topCenter,
           )
         : const LinearGradient(
-            colors: [Colors.white,Color(0xFFC5C5FF)],
+            colors: [Colors.white, Color(0xFFC5C5FF)],
             stops: [0.7, 1.0],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
