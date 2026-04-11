@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quiz_app/feature/Create/controller/create_controller.dart';
 
 class CreateBottomSheet extends StatelessWidget {
   const CreateBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final CreateController controller = Get.put(CreateController());
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
@@ -34,7 +36,7 @@ class CreateBottomSheet extends StatelessWidget {
             icon: Icons.quiz_outlined,
             title: 'Tạo Quiz',
             subtitle: 'Tạo bộ câu hỏi mới',
-            onTap: () => Get.back(),
+            onTap: () => controller.createSet(),
           ),
           const SizedBox(height: 12),
           CreateOption(
