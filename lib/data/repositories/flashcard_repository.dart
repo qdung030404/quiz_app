@@ -15,15 +15,19 @@ class FlashcardRepository {
 
       final response = await _supabase
           .from('flashcardset')
-          .select('*, flashcards(count)') // Lấy thêm số lượng thẻ trong mỗi bộ
+          .select('*, flashcards(count)')
           .eq('user_id', userId)
           .order('created_at', ascending: false);
-
-      return (response as List)
-          .map((json) => FlashCardSetModel.fromJson(json))
-          .toList();
+      final data = response as List;
+      return data.map((json) {
+        try {
+          return FlashCardSetModel.fromJson(json);
+        } catch (e) {
+          return FlashCardSetModel(title: 'Lỗi dữ liệu');
+        }
+      }).toList();
     } catch (e) {
-      print('❌ Error fetching flashcard sets: $e');
+      print('Error fetching flashcard sets: $e');
       return [];
     }
   }

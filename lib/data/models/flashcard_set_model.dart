@@ -19,17 +19,26 @@ class FlashCardSetModel {
 
   /// Chuyển đổi từ JSON (Supabase) sang Model
   factory FlashCardSetModel.fromJson(Map<String, dynamic> json) {
+    int count = 0;
+    if (json['flashcards'] != null && json['flashcards'] is List) {
+      final list = json['flashcards'] as List;
+      if (list.isNotEmpty && list[0] is Map) {
+        count = list[0]['count'] ?? 0;
+      }
+    } else if (json['flashcards_count'] != null) {
+      count = json['flashcards_count'];
+    }
+
     return FlashCardSetModel(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      title: json['title'] as String,
-      // cardCount thường được lấy thông qua câu query count() từ Supabase
-      cardCount: json['flashcards_count'] ?? 0,
+      id: json['id']?.toString(),
+      userId: json['user_id']?.toString(),
+      title: json['title']?.toString() ?? 'Không tiêu đề',
+      cardCount: count,
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
+          ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
           : DateTime.now(),
-      // Ánh xạ danh sách thẻ bài nếu có đính kèm trong JSON
-      cards: json['flashcards'] != null
+      // Ánh xạ danh sách thẻ bài nếu có đính kèm trong JSON (đã đổi tên từ formJson sang fromJson cho đồng nhất nếu cần)
+      cards: json['flashcards'] != null && json['flashcards'] is List && (json['flashcards'] as List).isNotEmpty && (json['flashcards'] as List)[0].containsKey('id')
           ? (json['flashcards'] as List)
                 .map((i) => FlashCardModel.formJson(i))
                 .toList()
