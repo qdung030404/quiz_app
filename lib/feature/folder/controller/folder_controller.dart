@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/folder_repository.dart';
 
-class CreateFolderController extends GetxController{
+import '../../../data/models/folder_model.dart';
+
+class FolderController extends GetxController{
   final FolderRepository _folderRepository = FolderRepository();
   final titleController = TextEditingController();
 
+  final Rx<FolderModel?> currentFolder = Rx<FolderModel?>(null);
+  final RxList<FlashCardSetModel> setsInFolder = <FlashCardSetModel>[].obs;
+  final RxBool loading = false.obs;
   final isLoading = false.obs;
   var isTitleValid = false.obs;
 
@@ -44,4 +50,18 @@ class CreateFolderController extends GetxController{
       isLoading.value = false;
     }
   }
+  Future<void> loadFolder(FolderModel folder,) async {
+    try{
+      loading.value = true;
+      setsInFolder.clear(); // Xóa dữ liệu cũ của folder trước đó
+      currentFolder.value = folder;
+      setsInFolder.value = await _folderRepository.getSetInFolder(folder.id!);
+      print('Sets in folder: ${setsInFolder.length}');
+    }catch (e){
+      Get.snackbar('lỗi', '$e');
+    }finally{
+      loading.value = false;
+    }
+  }
+
 }

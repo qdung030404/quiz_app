@@ -1,3 +1,4 @@
+import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/models/folder_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -30,7 +31,7 @@ class FolderRepository {
 
       final result = await _supabase
           .from('folder')
-          .select()
+          .select('*, flashcardset(count)')
           .eq('user_id', userId)
           .order('created_at', ascending: false);
 
@@ -45,6 +46,22 @@ class FolderRepository {
       }).toList();
     } catch (e) {
       print('Error fetching folder: $e'); // Xem lỗi thực sự là gì
+      return [];
+    }
+  }
+
+  Future<List<FlashCardSetModel>> getSetInFolder(String folderId) async {
+    try {
+      final respone = await _supabase
+          .from('flashcardset')
+          .select()
+          .eq('folder_id', folderId)
+          .order('created_at', ascending: true);
+      return (respone as List)
+          .map((json) => FlashCardSetModel.fromJson(json))
+          .toList();
+    } catch (e) {
+      print('Error fetching : $e');
       return [];
     }
   }

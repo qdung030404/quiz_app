@@ -17,7 +17,7 @@ class CreateFolderScreen extends StatefulWidget {
 }
 
 class _CreateFolderScreenState extends State<CreateFolderScreen> {
-  final CreateFolderController _controller = CreateFolderController();
+  final FolderController _controller = FolderController();
 
   @override
   Widget build(BuildContext context) {
