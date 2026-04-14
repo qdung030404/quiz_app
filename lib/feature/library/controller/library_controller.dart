@@ -1,11 +1,18 @@
 import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
+import 'package:quiz_app/data/models/folder_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
+import 'package:quiz_app/data/repositories/folder_repository.dart';
 
 class LibraryController extends GetxController {
   final FlashcardRepository _flashcardRepository = FlashcardRepository();
+  final FolderRepository _folderRepository = FolderRepository();
 
   final RxList<FlashCardSetModel> flashcardSet = <FlashCardSetModel>[].obs;
+
+  final RxList<FolderModel> folder = <FolderModel>[].obs;
+
+  final selectedCategory = LibraryCategory.libraryCategories[0].obs;
 
   final isLoading = false.obs;
 
@@ -27,4 +34,41 @@ class LibraryController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> fetchFolder() async {
+    try {
+      isLoading.value = true;
+      final result = await _folderRepository.getFolder();
+      folder.assignAll(result);
+    } catch (e) {
+      Get.snackbar('lỗi', '$e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void changeCategory(LibraryCategory category) {
+    // Kiểm tra trước khi gán để tránh return sớm
+    if (selectedCategory.value.id == category.id) return;
+
+    selectedCategory.value = category;
+
+    if (category.id == 'flashcard_set') {
+      fetchFlashcardSet();
+    } else if (category.id == 'folder') {
+      fetchFolder();
+    }
+  }
+}
+
+class LibraryCategory {
+  final String id;
+  final String title;
+
+  LibraryCategory({required this.id, required this.title});
+
+  static final List<LibraryCategory> libraryCategories = [
+    LibraryCategory(id: 'flashcard_set', title: 'Học phần'),
+    LibraryCategory(id: 'folder', title: 'Thư mục'),
+  ];
 }

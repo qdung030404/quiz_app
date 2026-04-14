@@ -22,4 +22,30 @@ class FolderRepository {
       return null;
     }
   }
+
+  Future<List<FolderModel>> getFolder() async {
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) return [];
+
+      final result = await _supabase
+          .from('folder')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
+
+      print('getFolder result: $result'); // Debug xem data trả về
+      return (result as List).map((json) {
+        try {
+          return FolderModel.fromJson(json);
+        } catch (e) {
+          print('Error parsing folder: $e');
+          return FolderModel(title: 'Lỗi dữ liệu');
+        }
+      }).toList();
+    } catch (e) {
+      print('Error fetching folder: $e'); // Xem lỗi thực sự là gì
+      return [];
+    }
+  }
 }
