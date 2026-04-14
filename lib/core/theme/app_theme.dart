@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeService extends GetxController {
+class ThemeService extends GetxController with WidgetsBindingObserver {
   final _key = 'isDarkMode';
   final _autoKey = 'isAutoChange';
   final _systemKey = 'isSystemMode';
@@ -16,6 +16,26 @@ class ThemeService extends GetxController {
       _applyTimeChange();
     }
     return this;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    if (isSystemMode) {
+      update();
+    }
+    super.didChangePlatformBrightness();
   }
 
   bool get isSystemMode => _prefs.getBool(_systemKey) ?? true;

@@ -5,7 +5,7 @@ class AppColor {
   static Color fillColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? const Color(0xff9181F4)
-        : Colors.grey.shade100;
+        : Colors.grey.withOpacity(0.4);
   }
 
   static Color borderColor(BuildContext context) {

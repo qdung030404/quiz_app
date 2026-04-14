@@ -43,7 +43,7 @@ class CreateBottomSheet extends StatelessWidget {
             icon: Icons.folder_outlined,
             title: 'Tạo Thư mục',
             subtitle: 'Nhóm các quiz lại với nhau',
-            onTap: () => Get.back(),
+            onTap: () => controller.createFolder(),
           ),
           SizedBox(height: MediaQuery.of(context).viewInsets.bottom + 24),
         ],
