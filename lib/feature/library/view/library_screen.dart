@@ -19,11 +19,6 @@ class LibraryTab extends StatelessWidget {
     return BaseScreen(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () => Get.back(),
-            icon: const Icon(Icons.arrow_back),
-          ),
           title: Text(
             'Thư viện',
             style: GoogleFonts.beVietnamPro(
