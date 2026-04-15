@@ -4,21 +4,21 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/theme/app_color.dart';
 
-class Flashcard extends StatefulWidget {
+class CreateFlashcardItem extends StatefulWidget {
   final TextEditingController terminologyController;
   final TextEditingController definitionController;
 
-  const Flashcard({
+  const CreateFlashcardItem({
     super.key,
     required this.terminologyController,
     required this.definitionController,
   });
 
   @override
-  State<Flashcard> createState() => _FlashcardState();
+  State<CreateFlashcardItem> createState() => _CreateFlashcardItemState();
 }
 
-class _FlashcardState extends State<Flashcard> {
+class _CreateFlashcardItemState extends State<CreateFlashcardItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
