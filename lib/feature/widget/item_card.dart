@@ -4,13 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ItemCard extends StatelessWidget {
   final String title;
-  final String count;
+  final String? count;
   final VoidCallback onTap;
   final Icon iconData;
   const ItemCard({
     super.key,
     required this.title,
-    required this.count,
+    this.count,
     required this.onTap,
     required this.iconData
   });
@@ -42,13 +42,15 @@ class ItemCard extends StatelessWidget {
             fontSize: 16.sp,
           ),
         ),
-        subtitle: Text(
-          count,
-            style: GoogleFonts.beVietnamPro(
-              fontWeight: FontWeight.normal,
-              fontSize: 12.sp,
-            ),
-        ),
+        subtitle: count != null 
+          ? Text(
+              count!,
+              style: GoogleFonts.beVietnamPro(
+                fontWeight: FontWeight.normal,
+                fontSize: 12.sp,
+              ),
+            )
+          : null,
         trailing: const Icon(Icons.chevron_right),
         onTap: onTap,
       ),

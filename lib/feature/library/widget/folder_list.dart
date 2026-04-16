@@ -22,7 +22,6 @@ class FolderList extends StatelessWidget {
         final folder = folders[index];
         return ItemCard(
           title: folder.title,
-          count: '${folder.setCount} bộ thẻ',
           iconData: Icon(Icons.folder_outlined),
           onTap: () => controller.goToFolderDetail(folder),
         );
