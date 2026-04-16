@@ -27,7 +27,9 @@ class FolderDetailScreen extends StatelessWidget {
           icon: const Icon(Icons.close),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+          IconButton(onPressed: () {
+            controller.goToAddScreen();
+          }, icon: Icon(Icons.add)),
           IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined)),
         ],
       ),

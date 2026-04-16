@@ -54,7 +54,7 @@ class FolderRepository {
     try {
       final respone = await _supabase
           .from('flashcardset')
-          .select()
+          .select('*, flashcards(count)')
           .eq('folder_id', folderId)
           .order('created_at', ascending: true);
       return (respone as List)
@@ -63,6 +63,20 @@ class FolderRepository {
     } catch (e) {
       print('Error fetching : $e');
       return [];
+    }
+  }
+
+  Future<bool> addSetsToFolder(String folderId, List<String> setIds) async {
+    try {
+      // Chúng ta cập nhật cột folder_id cho tất cả các set có ID nằm trong danh sách setIds
+      await _supabase
+          .from('flashcardset')
+          .update({'folder_id': folderId}) // Gán folder_id mới
+          .inFilter('id', setIds); // Lọc các bản ghi theo danh sách ID
+      return true;
+    } catch (e) {
+      print(' Error adding sets to folder: $e');
+      return false;
     }
   }
 }

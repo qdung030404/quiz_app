@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/folder_repository.dart';
+import 'package:quiz_app/feature/folder/view/add_flash_cards_set_screen.dart';
 
 import '../../../data/models/folder_model.dart';
 
@@ -63,5 +64,27 @@ class FolderController extends GetxController{
       loading.value = false;
     }
   }
+  Future<void> addSetsToFolder(List<String> setIds) async {
+    final folderId = currentFolder.value?.id;
+    if (folderId == null) return;
 
+    try {
+      loading.value = true;
+      bool success = await _folderRepository.addSetsToFolder(folderId, setIds);
+      if (success) {
+        await loadFolder(currentFolder.value!);
+        Get.back();
+        Get.snackbar('Thành công', 'Đã thêm học phần vào thư mục');
+      }
+    } catch (e) {
+      Get.snackbar('lỗi', '$e');
+    } finally {
+      loading.value = false;
+    }
+  }
+  void goToAddScreen() => Get.to(
+        () => const AddFlashCardsSetScreen(),
+    transition: Transition.downToUp,
+    duration: const Duration(milliseconds: 300),
+  );
 }
