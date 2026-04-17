@@ -9,6 +9,8 @@ import 'package:quiz_app/feature/folder/Widget/button.dart';
 import 'package:quiz_app/feature/folder/controller/folder_controller.dart';
 import 'package:quiz_app/feature/widget/item_card.dart';
 
+import '../Widget/folder_menu_bottomsheet.dart';
+
 class FolderDetailScreen extends StatelessWidget {
   final FolderModel folder;
 
@@ -27,10 +29,33 @@ class FolderDetailScreen extends StatelessWidget {
           icon: const Icon(Icons.close),
         ),
         actions: [
-          IconButton(onPressed: () {
-            controller.goToAddScreen();
-          }, icon: Icon(Icons.add)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert_outlined)),
+          IconButton(
+            onPressed: () {
+              controller.goToAddScreen();
+            },
+            icon: Icon(Icons.add),
+          ),
+          IconButton(
+            onPressed: () {
+              Get.bottomSheet(
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: FolderMenuBottomSheet(
+                    onAddSet: () => controller.goToAddScreen(),
+                    onEdit: () => controller.goToEditScreen(),
+                    onShare: () {},
+                    onDelete: () => controller.deleteFolder(),
+                  ),
+                ),
+                backgroundColor: Color(0xFF211374),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              );
+            },
+            icon: Icon(Icons.more_vert_outlined),
+          ),
         ],
       ),
       child: SingleChildScrollView(

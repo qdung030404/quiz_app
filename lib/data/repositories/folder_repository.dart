@@ -79,4 +79,37 @@ class FolderRepository {
       return false;
     }
   }
+
+  Future<bool> removeFolder(String folderId) async {
+    try {
+      await _supabase
+          .from('flashcardset')
+          .update({'folder_id': null})
+          .eq('folder_id', folderId);
+
+      await _supabase
+          .from('folder')
+          .delete()
+          .eq('id', folderId);
+      return true;
+    } catch (e) {
+      print(' Error delete folder: $e');
+      return false;
+    }
+  }
+  Future<FolderModel?> updateFolder(String folderId, String folderName) async {
+    try {
+      final response = await _supabase
+          .from('folder')
+          .update({'title': folderName})
+          .eq('id', folderId)
+          .select()
+          .single();
+          
+      return FolderModel.fromJson(response);
+    } catch (e) {
+      print('Error updating folder: $e');
+      return null;
+    }
+  }
 }

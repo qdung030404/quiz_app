@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/folder_repository.dart';
 import 'package:quiz_app/feature/folder/view/add_flash_cards_set_screen.dart';
+import 'package:quiz_app/feature/folder/view/edit_folder_screen.dart';
+import 'package:quiz_app/feature/library/controller/library_controller.dart';
 
 import '../../../data/models/folder_model.dart';
 
@@ -15,6 +17,7 @@ class FolderController extends GetxController{
   final RxBool loading = false.obs;
   final isLoading = false.obs;
   var isTitleValid = false.obs;
+  late final _folderId = currentFolder.value?.id;
 
   @override
   void onInit() {
@@ -65,12 +68,12 @@ class FolderController extends GetxController{
     }
   }
   Future<void> addSetsToFolder(List<String> setIds) async {
-    final folderId = currentFolder.value?.id;
-    if (folderId == null) return;
+
+    if (_folderId == null) return;
 
     try {
       loading.value = true;
-      bool success = await _folderRepository.addSetsToFolder(folderId, setIds);
+      bool success = await _folderRepository.addSetsToFolder(_folderId, setIds);
       if (success) {
         await loadFolder(currentFolder.value!);
         Get.back();
@@ -82,9 +85,63 @@ class FolderController extends GetxController{
       loading.value = false;
     }
   }
+  Future<void> deleteFolder() async{
+    if(_folderId == null) return;
+    try{
+      loading.value = true;
+      bool success = await _folderRepository.removeFolder(_folderId);
+      if (success) {
+        if(Get.isRegistered<LibraryController>()){
+          Get.find<LibraryController>().fetchFolder();
+        }
+        Get.back();
+        Get.back();
+        Get.snackbar('Thành công', 'Đã xóa thư mục ${currentFolder.value?.title}');
+      }
+    }catch (e) {
+      Get.snackbar('lỗi', '$e');
+    } finally {
+      loading.value = false;
+    }
+  }
+  Future<void> editFolder() async{
+    final folderId = currentFolder.value?.id;
+    if(folderId == null) return;
+    
+    final title = titleController.text.trim();
+    if(title.isEmpty) return;
+    
+    try{
+      loading.value = true;
+      final editedFolder = await _folderRepository.updateFolder(folderId, title);
+      
+      if(editedFolder != null){
+        currentFolder.value = editedFolder;
+
+        if(Get.isRegistered<LibraryController>()){
+          Get.find<LibraryController>().fetchFolder();
+        }
+        
+        Get.back();
+        Get.back();
+        Get.snackbar('Thành công', 'Tên thư mục đổi thành: $title');
+      } else {
+        Get.snackbar('Lỗi', 'Không thể đổi tên thư mục. Vui lòng thử lại.');
+      }
+    } catch (e) {
+      Get.snackbar('Lỗi', '$e');
+    } finally {
+      loading.value = false;
+    }
+  }
   void goToAddScreen() => Get.to(
         () => const AddFlashCardsSetScreen(),
     transition: Transition.downToUp,
+    duration: const Duration(milliseconds: 300),
+  );
+  void goToEditScreen() => Get.to(
+        () => const EditFolderScreen(),
+    transition: Transition.leftToRight,
     duration: const Duration(milliseconds: 300),
   );
 }

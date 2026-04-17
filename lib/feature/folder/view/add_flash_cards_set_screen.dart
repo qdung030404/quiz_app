@@ -18,7 +18,6 @@ class _AddFlashCardsSetScreenState extends State<AddFlashCardsSetScreen> {
   final folderController = Get.put(FolderController());
   final RxSet<String> _selectedSetIds = <String>{}.obs;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,13 +78,23 @@ class _AddFlashCardsSetScreenState extends State<AddFlashCardsSetScreen> {
       bottomNavigationBar: Stack(
         children: [
           Obx(
-            () => ElevatedButton(
-              onPressed: _selectedSetIds.isNotEmpty
-                  ? () => folderController.addSetsToFolder(
-                      _selectedSetIds.toList(),
-                    )
-                  : null,
-              child: Text('Thêm ${_selectedSetIds.length} mục'),
+            () => Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.1,
+              padding: EdgeInsets.all(16.sp),
+              margin: EdgeInsets.all(16.sp),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff9181F4),
+                  foregroundColor: Colors.white
+                ),
+                onPressed: _selectedSetIds.isNotEmpty
+                    ? () => folderController.addSetsToFolder(
+                        _selectedSetIds.toList(),
+                      )
+                    : null,
+                child: Text('Thêm ${_selectedSetIds.length} mục'),
+              ),
             ),
           ),
         ],
