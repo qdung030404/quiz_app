@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/core/widgets/base_screen.dart';
 import 'package:quiz_app/feature/flashcard_set/controller/flashcard_controller.dart';
+
 import 'package:quiz_app/feature/flashcard_set/widget/create_flashcard_item.dart';
 
 class CreateFlashcardSetScreen extends StatelessWidget {
@@ -35,7 +36,7 @@ class CreateFlashcardSetScreen extends StatelessWidget {
           ),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => controller.goToSetting(),
               icon: const Icon(Icons.settings_outlined),
             ),
             Obx(
@@ -62,7 +63,6 @@ class CreateFlashcardSetScreen extends StatelessWidget {
                 style: GoogleFonts.beVietnamPro(
                   fontWeight: FontWeight.bold,
                   fontSize: 18.sp,
-                  color: Colors.white,
                 ),
                 controller: controller.titleController,
                 decoration: InputDecoration(
@@ -89,13 +89,26 @@ class CreateFlashcardSetScreen extends StatelessWidget {
               // Danh sách các thẻ bài
               Expanded(
                 child: Obx(
-                  () => ListView.builder(
-                    itemCount: controller.flashcardDrafts.length,
-                    itemBuilder: (context, index) {
+                  () => AnimatedList(
+                    key: controller.listKey,
+                    initialItemCount: controller.flashcardDrafts.length,
+                    itemBuilder: (context, index, animation) {
                       final draft = controller.flashcardDrafts[index];
-                      return CreateFlashcardItem(
-                        terminologyController: draft.terminologyController,
-                        definitionController: draft.definitionController,
+                      return SlideTransition(
+                        position: animation.drive(
+                          Tween<Offset>(
+                            begin: const Offset(1, 0),
+                            end: Offset.zero,
+                          ).chain(CurveTween(curve: Curves.easeOutQuart)),
+                        ),
+                        child: FadeTransition(
+                          opacity: animation,
+                          child: CreateFlashcardItem(
+                            index: index,
+                            terminologyController: draft.terminologyController,
+                            definitionController: draft.definitionController,
+                          ),
+                        ),
                       );
                     },
                   ),
