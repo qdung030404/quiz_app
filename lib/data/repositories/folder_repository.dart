@@ -31,7 +31,7 @@ class FolderRepository {
 
       final result = await _supabase
           .from('folder')
-          .select('*, flashcardset(count)')
+          .select('*, flashcard_set(count)')
           .eq('user_id', userId)
           .order('created_at', ascending: false);
 
@@ -53,7 +53,7 @@ class FolderRepository {
   Future<List<FlashCardSetModel>> getSetInFolder(String folderId) async {
     try {
       final respone = await _supabase
-          .from('flashcardset')
+          .from('flashcard_set')
           .select('*, flashcards(count)')
           .eq('folder_id', folderId)
           .order('created_at', ascending: true);
@@ -70,7 +70,7 @@ class FolderRepository {
     try {
       // Chúng ta cập nhật cột folder_id cho tất cả các set có ID nằm trong danh sách setIds
       await _supabase
-          .from('flashcardset')
+          .from('flashcard_set')
           .update({'folder_id': folderId}) // Gán folder_id mới
           .inFilter('id', setIds); // Lọc các bản ghi theo danh sách ID
       return true;
@@ -83,7 +83,7 @@ class FolderRepository {
   Future<bool> removeFolder(String folderId) async {
     try {
       await _supabase
-          .from('flashcardset')
+          .from('flashcard_set')
           .update({'folder_id': null})
           .eq('folder_id', folderId);
 
