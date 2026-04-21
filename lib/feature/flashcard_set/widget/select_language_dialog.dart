@@ -9,6 +9,7 @@ enum LanguageType { terminology, definition }
 
 class SelectLanguageDialog extends StatelessWidget {
   final LanguageType type;
+
   const SelectLanguageDialog({super.key, required this.type});
 
   @override
@@ -26,7 +27,9 @@ class SelectLanguageDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min, // Để BottomSheet co giãn theo nội dung
         children: [
           Text(
-            type == LanguageType.terminology ? 'Chọn ngôn ngữ thuật ngữ' : 'Chọn ngôn ngữ định nghĩa',
+            type == LanguageType.terminology
+                ? 'Chọn ngôn ngữ thuật ngữ'
+                : 'Chọn ngôn ngữ định nghĩa',
             style: GoogleFonts.beVietnamPro(
               fontWeight: FontWeight.bold,
               fontSize: 18.sp,
@@ -42,11 +45,10 @@ class SelectLanguageDialog extends StatelessWidget {
               final item = languages[index];
 
               return Obx(() {
-                // Kiểm tra xem item này có đang được chọn không
-                final currentLanguage = type == LanguageType.terminology 
-                    ? controller.terminologyLanguage.value 
+                final currentLanguage = type == LanguageType.terminology
+                    ? controller.terminologyLanguage.value
                     : controller.definitionLanguage.value;
-                
+
                 final isSelected = currentLanguage?.id == item.id;
 
                 return GestureDetector(
@@ -56,16 +58,23 @@ class SelectLanguageDialog extends StatelessWidget {
                     } else {
                       controller.definitionLanguage.value = item;
                     }
-                    Get.back(); // Đóng BottomSheet
+                    Get.back();
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 8.h),
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 12.h,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.deepPurpleAccent.withOpacity(0.2) : Colors.white10,
+                      color: isSelected
+                          ? Colors.deepPurpleAccent.withOpacity(0.2)
+                          : Colors.white10,
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(
-                        color: isSelected ? Colors.deepPurpleAccent : Colors.transparent,
+                        color: isSelected
+                            ? Colors.deepPurpleAccent
+                            : Colors.transparent,
                         width: 1,
                       ),
                     ),
@@ -75,13 +84,18 @@ class SelectLanguageDialog extends StatelessWidget {
                         Text(
                           item.title,
                           style: GoogleFonts.beVietnamPro(
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                             fontSize: 16.sp,
                             color: isSelected ? Colors.white : Colors.white70,
                           ),
                         ),
                         if (isSelected)
-                          const Icon(Icons.check_circle, color: Colors.deepPurpleAccent),
+                          const Icon(
+                            Icons.check_circle,
+                            color: Colors.deepPurpleAccent,
+                          ),
                       ],
                     ),
                   ),
