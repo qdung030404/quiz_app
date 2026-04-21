@@ -14,7 +14,7 @@ class FlashcardRepository {
       if (userId == null) return [];
 
       final response = await _supabase
-          .from('flashcardset')
+          .from('flashcard_set')
           .select('*, flashcards(count)')
           .eq('user_id', userId)
           .order('created_at', ascending: false);
@@ -45,7 +45,7 @@ class FlashcardRepository {
           .map((json) => FlashCardModel.formJson(json))
           .toList();
     } catch (e) {
-      print('❌ Error fetching cards in set: $e');
+      print(' Error fetching cards in set: $e');
       return [];
     }
   }
@@ -54,33 +54,36 @@ class FlashcardRepository {
   Future<FlashCardSetModel?> getSetDetail(String setId) async {
     try {
       final response = await _supabase
-          .from('flashcardset')
+          .from('flashcard_set')
           .select('*, flashcards(*)')
           .eq('id', setId)
           .single();
 
       return FlashCardSetModel.fromJson(response);
     } catch (e) {
-      print('❌ Error fetching set detail: $e');
+      print(' Error fetching set detail: $e');
       return null;
     }
   }
 
   /// 4. Tạo mới một Bộ thẻ
-  Future<FlashCardSetModel?> createSet(String title) async {
+  Future<FlashCardSetModel?> createSet(
+    String title, {
+    bool isPublic = false,
+  }) async {
     try {
       final userId = _supabase.auth.currentUser?.id;
       if (userId == null) return null;
 
       final response = await _supabase
-          .from('flashcardset')
-          .insert({'title': title, 'user_id': userId})
+          .from('flashcard_set')
+          .insert({'title': title, 'user_id': userId, 'is_public': isPublic})
           .select()
           .single();
 
       return FlashCardSetModel.fromJson(response);
     } catch (e) {
-      print('❌ Error creating set: $e');
+      print(' Error creating set: $e');
       return null;
     }
   }
@@ -96,7 +99,7 @@ class FlashcardRepository {
 
       return FlashCardModel.formJson(response);
     } catch (e) {
-      print('❌ Error adding flashcard: $e');
+      print(' Error adding flashcard: $e');
       return null;
     }
   }
@@ -114,7 +117,7 @@ class FlashcardRepository {
           .map((json) => FlashCardModel.formJson(json))
           .toList();
     } catch (e) {
-      print('❌ Error bulk adding flashcards: $e');
+      print(' Error bulk adding flashcards: $e');
       return [];
     }
   }
@@ -122,10 +125,10 @@ class FlashcardRepository {
   /// 6. Xóa một Bộ thẻ (Sẽ tự động xóa các thẻ bên trong do CASCADE)
   Future<bool> deleteSet(String setId) async {
     try {
-      await _supabase.from('flashcardset').delete().eq('id', setId);
+      await _supabase.from('flashcard_set').delete().eq('id', setId);
       return true;
     } catch (e) {
-      print('❌ Error deleting set: $e');
+      print(' Error deleting set: $e');
       return false;
     }
   }

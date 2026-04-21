@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
-import 'package:quiz_app/feature/flashcard_set/widget/create_set_settings.dart';
+import 'package:quiz_app/feature/flashcard_set/view/create_set_settings.dart';
 
 class FlashCardDraft {
   final TextEditingController terminologyController;
@@ -30,12 +30,13 @@ class FlashcardController extends GetxController {
   final Rx<FlashCardSetModel?> currentSet = Rx<FlashCardSetModel?>(null);
 
   final RxList<FlashCardModel> cardInSet = <FlashCardModel>[].obs;
-  
+
   // Key điều khiển AnimatedList
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
-  
+
   final terminologyLanguage = Rxn<SelectLanguage>();
   final definitionLanguage = Rxn<SelectLanguage>();
+  final RxBool isPublic = false.obs;
 
   final RxBool loading = false.obs;
   final isLoading = false.obs;
@@ -55,10 +56,13 @@ class FlashcardController extends GetxController {
     );
   }
 
-  void removeCard(int index, Widget Function(BuildContext, Animation<double>) removedItemBuilder) {
+  void removeCard(
+    int index,
+    Widget Function(BuildContext, Animation<double>) removedItemBuilder,
+  ) {
     if (flashcardDrafts.length > 2) {
       final removedItem = flashcardDrafts[index];
-      
+
       listKey.currentState?.removeItem(
         index,
         (context, animation) => removedItemBuilder(context, animation),
@@ -66,7 +70,10 @@ class FlashcardController extends GetxController {
       );
 
       flashcardDrafts.removeAt(index);
-      Future.delayed(const Duration(milliseconds: 400), () => removedItem.dispose());
+      Future.delayed(
+        const Duration(milliseconds: 400),
+        () => removedItem.dispose(),
+      );
     } else {
       Get.snackbar('Thông báo', 'Bộ thẻ cần tối thiểu 2 thẻ bài');
     }
@@ -98,7 +105,10 @@ class FlashcardController extends GetxController {
         return;
       }
 
-      final newSet = await _flashcardRepository.createSet(title);
+      final newSet = await _flashcardRepository.createSet(
+        title,
+        isPublic: isPublic.value,
+      );
 
       if (newSet != null && newSet.id != null) {
         final List<FlashCardModel> cardsToSave = flashcardDrafts.map((draft) {
@@ -126,23 +136,25 @@ class FlashcardController extends GetxController {
     }
   }
 
-  Future<void> loadCardInSet(FlashCardSetModel set)async {
-    try{
+  Future<void> loadCardInSet(FlashCardSetModel set) async {
+    try {
       loading.value = true;
       cardInSet.clear();
       currentSet.value = set;
       cardInSet.value = await _flashcardRepository.getCardsInSet(set.id!);
-    }catch (e){
+    } catch (e) {
       Get.snackbar('lỗi', '$e');
-    }finally{
+    } finally {
       loading.value = false;
     }
   }
+
   void goToSetting() => Get.to(
-        () => const CreateSetSettings(),
+    () => const CreateSetSettings(),
     transition: Transition.fadeIn,
     duration: const Duration(milliseconds: 300),
   );
+
   @override
   void onClose() {
     titleController.dispose();

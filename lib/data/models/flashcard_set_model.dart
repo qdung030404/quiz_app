@@ -5,6 +5,7 @@ class FlashCardSetModel {
   final String? userId;
   final String title;
   final int cardCount;
+  final bool isPublic;
   final DateTime? createdAt;
   final List<FlashCardModel>? cards;
 
@@ -13,6 +14,7 @@ class FlashCardSetModel {
     this.userId,
     required this.title,
     this.cardCount = 0,
+    this.isPublic = false,
     this.createdAt,
     this.cards,
   });
@@ -34,11 +36,16 @@ class FlashCardSetModel {
       userId: json['user_id']?.toString(),
       title: json['title']?.toString() ?? 'Không tiêu đề',
       cardCount: count,
+      isPublic: json['is_public'] ?? false,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
           : DateTime.now(),
       // Ánh xạ danh sách thẻ bài nếu có đính kèm trong JSON (đã đổi tên từ formJson sang fromJson cho đồng nhất nếu cần)
-      cards: json['flashcards'] != null && json['flashcards'] is List && (json['flashcards'] as List).isNotEmpty && (json['flashcards'] as List)[0].containsKey('id')
+      cards:
+          json['flashcards'] != null &&
+              json['flashcards'] is List &&
+              (json['flashcards'] as List).isNotEmpty &&
+              (json['flashcards'] as List)[0].containsKey('id')
           ? (json['flashcards'] as List)
                 .map((i) => FlashCardModel.formJson(i))
                 .toList()
@@ -51,6 +58,7 @@ class FlashCardSetModel {
     return {
       'title': title,
       'user_id': userId,
+      'is_public': isPublic,
       // 'id' và 'created_at' thường do Database tự sinh
     };
   }
@@ -60,6 +68,7 @@ class FlashCardSetModel {
     String? title,
     String? description,
     int? cardCount,
+    bool? isPublic,
     List<FlashCardModel>? cards,
   }) {
     return FlashCardSetModel(
@@ -67,6 +76,7 @@ class FlashCardSetModel {
       userId: userId,
       title: title ?? this.title,
       cardCount: cardCount ?? this.cardCount,
+      isPublic: isPublic ?? this.isPublic,
       createdAt: createdAt,
       cards: cards ?? this.cards,
     );
