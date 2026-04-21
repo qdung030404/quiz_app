@@ -23,7 +23,6 @@ class _EditFolderScreenState extends State<EditFolderScreen> {
   @override
   void initState() {
     super.initState();
-    // Bỏ tên folder cũ vào ô TextField
     if (_controller.currentFolder.value != null) {
       _controller.titleController.text = _controller.currentFolder.value!.title;
     }
@@ -93,6 +92,6 @@ class _EditFolderScreenState extends State<EditFolderScreen> {
           ],
         ),
       ),
-    );;
+    );
   }
 }
