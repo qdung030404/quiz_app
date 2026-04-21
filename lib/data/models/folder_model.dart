@@ -20,8 +20,8 @@ class FolderModel {
   factory FolderModel.fromJson(Map<String, dynamic> json) {
     int count = 0;
     // Xử lý đếm số bộ thẻ trong folder nếu có join từ Supabase
-    if (json['flashcardset'] != null && json['flashcardset'] is List) {
-      final list = json['flashcardset'] as List;
+    if (json['flashcard_set'] != null && json['flashcard_set'] is List) {
+      final list = json['flashcard_set'] as List;
       // Nếu Supabase trả về dạng count của join
       if (list.isNotEmpty && list[0].containsKey('count')) {
         count = list[0]['count'] ?? 0;
@@ -40,8 +40,8 @@ class FolderModel {
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
           : DateTime.now(),
-      flashcardSets: (json['flashcardset'] != null && json['flashcardset'] is List)
-          ? (json['flashcardset'] as List)
+      flashcardSets: (json['flashcard_set'] != null && json['flashcard_set'] is List)
+          ? (json['flashcard_set'] as List)
           .where((i) => i is Map && i.containsKey('id')) // Chỉ map nếu là object hợp lệ
           .map((i) => FlashCardSetModel.fromJson(i))
           .toList()
