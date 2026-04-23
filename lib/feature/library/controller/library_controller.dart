@@ -3,6 +3,7 @@ import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/models/folder_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
 import 'package:quiz_app/data/repositories/folder_repository.dart';
+import 'package:quiz_app/feature/flashcard_set/view/flashcard_set_detail_screen.dart';
 import 'package:quiz_app/feature/folder/view/folder_detail_screen.dart';
 
 class LibraryController extends GetxController {
@@ -61,6 +62,7 @@ class LibraryController extends GetxController {
     }
   }
   void goToFolderDetail(FolderModel selectedFolder) => Get.to(() => FolderDetailScreen(folder: selectedFolder));
+  void goToSetDetail(FlashCardSetModel selectedSet) => Get.to(() => FlashcardSetDetailScreen(flashcardSet: selectedSet));
 }
 
 class LibraryCategory {

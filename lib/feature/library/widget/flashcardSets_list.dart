@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/feature/widget/item_card.dart';
 
+import 'package:quiz_app/feature/library/controller/library_controller.dart';
+
 class FlashcardsetsList extends StatelessWidget {
   final List<FlashCardSetModel> flashcardSets;
   final Function(FlashCardSetModel) onTap;
@@ -14,6 +16,7 @@ class FlashcardsetsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LibraryController controller = LibraryController();
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -25,7 +28,7 @@ class FlashcardsetsList extends StatelessWidget {
           title: set.title,
           iconData: Icon(Icons.quiz_outlined),
           count: '${set.cardCount} thẻ',
-          onTap: () {},
+          onTap: () {controller.goToSetDetail(set);},
         );
       },
     );
