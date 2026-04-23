@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quiz_app/feature/flashcard_set/widget/select_language_dialog.dart';
+import 'package:quiz_app/feature/flashcard_set/widget/setting_widget/select_language_dialog.dart';
 
 import '../controller/flashcard_controller.dart';
-import '../widget/privacy_dialog.dart';
+import '../widget/setting_widget/privacy_dialog.dart';
 
 class CreateSetSettings extends StatefulWidget {
   const CreateSetSettings({super.key});

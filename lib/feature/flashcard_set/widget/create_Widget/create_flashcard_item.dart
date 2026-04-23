@@ -6,10 +6,10 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quiz_app/feature/flashcard_set/widget/select_language_dialog.dart';
+import 'package:quiz_app/feature/flashcard_set/widget/setting_widget/select_language_dialog.dart';
 
-import '../../../core/theme/app_color.dart';
-import '../controller/flashcard_controller.dart';
+import '../../../../core/theme/app_color.dart';
+import '../../controller/flashcard_controller.dart';
 
 class CreateFlashcardItem extends StatefulWidget {
   final TextEditingController terminologyController;
