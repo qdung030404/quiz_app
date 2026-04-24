@@ -35,4 +35,9 @@ class AppColor {
             end: Alignment.topCenter,
           );
   }
+  static Color buttonColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : const Color(0xff2A1896);
+  }
 }
