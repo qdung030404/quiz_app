@@ -145,7 +145,7 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
               FeatureItem(
                 title: 'Flashcards',
                 icon: Image.asset('assets/image/flashcards.png'),
-                onTap: () {},
+                onTap: () => _controller.goToFlashcard(widget.flashcardSet),
               ),
               SizedBox(height: 12.h),
               FeatureItem(

@@ -10,9 +10,10 @@ import 'package:quiz_app/feature/flashcard_set/controller/flashcard_controller.d
 
 class FlashCardItem extends StatefulWidget {
   final FlashCardModel flashCardModel;
+  final Gradient? gradient;
   const FlashCardItem({
     super.key,
-    required this.flashCardModel
+    required this.flashCardModel, this.gradient
   });
 
   @override
@@ -72,10 +73,9 @@ class _FlashCardItemState extends State<FlashCardItem> with SingleTickerProvider
   Widget _buildFront() {
     return Container(
       key: const ValueKey(true),
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.25,
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
+        gradient: widget.gradient,
+        color: widget.gradient == null ? Colors.grey.withOpacity(0.2) : null,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Center(
@@ -95,10 +95,9 @@ class _FlashCardItemState extends State<FlashCardItem> with SingleTickerProvider
       alignment: Alignment.center,
       child: Container(
         key: const ValueKey(false),
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height * 0.25,
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2),
+          gradient: widget.gradient,
+          color: widget.gradient == null ? Colors.grey.withOpacity(0.2) : null,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
