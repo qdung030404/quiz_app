@@ -9,7 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/feature/flashcard_set/widget/setting_widget/select_language_dialog.dart';
 
 import '../../../../core/theme/app_color.dart';
-import '../../controller/flashcard_controller.dart';
+import '../../controller/create_flashcard_controller.dart';
 
 class CreateFlashcardItem extends StatefulWidget {
   final TextEditingController terminologyController;
@@ -28,7 +28,7 @@ class CreateFlashcardItem extends StatefulWidget {
 }
 
 class _CreateFlashcardItemState extends State<CreateFlashcardItem> {
-  final FlashcardController controller = Get.find<FlashcardController>();
+  final CreateFlashcardController controller = Get.find<CreateFlashcardController>();
 
   final FocusNode _termFocus = FocusNode();
   final FocusNode _defFocus = FocusNode();

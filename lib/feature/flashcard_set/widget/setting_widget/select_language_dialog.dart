@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../controller/flashcard_controller.dart';
+import '../../controller/create_flashcard_controller.dart';
 
 enum LanguageType { terminology, definition }
 
@@ -14,7 +15,7 @@ class SelectLanguageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlashcardController controller = Get.find<FlashcardController>();
+    final CreateFlashcardController controller = Get.find<CreateFlashcardController>();
     final languages = SelectLanguage.selectLanguage;
 
     return Container(

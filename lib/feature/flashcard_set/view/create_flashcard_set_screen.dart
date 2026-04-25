@@ -6,7 +6,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/core/widgets/base_screen.dart';
-import 'package:quiz_app/feature/flashcard_set/controller/flashcard_controller.dart';
+import 'package:quiz_app/feature/flashcard_set/controller/create_flashcard_controller.dart';
 import 'package:quiz_app/feature/flashcard_set/widget/create_Widget/create_flashcard_item.dart';
 
 class CreateFlashcardSetScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class CreateFlashcardSetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FlashcardController controller = Get.put(FlashcardController());
+    final CreateFlashcardController controller = Get.put(CreateFlashcardController());
 
     return BaseScreen(
       child: Scaffold(

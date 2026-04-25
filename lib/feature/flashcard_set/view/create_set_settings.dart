@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/feature/flashcard_set/widget/setting_widget/select_language_dialog.dart';
 
-import '../controller/flashcard_controller.dart';
+import '../controller/create_flashcard_controller.dart';
 import '../widget/setting_widget/privacy_dialog.dart';
 
 class CreateSetSettings extends StatefulWidget {
@@ -15,7 +15,7 @@ class CreateSetSettings extends StatefulWidget {
 }
 
 class _CreateSetSettingsState extends State<CreateSetSettings> {
-  final FlashcardController controller = Get.find<FlashcardController>();
+  final CreateFlashcardController controller = Get.find<CreateFlashcardController>();
 
   @override
   Widget build(BuildContext context) {
