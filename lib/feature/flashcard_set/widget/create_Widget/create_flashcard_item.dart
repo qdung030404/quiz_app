@@ -34,6 +34,7 @@ class _CreateFlashcardItemState extends State<CreateFlashcardItem> {
   final FocusNode _defFocus = FocusNode();
   final RxBool _isTermFocused = false.obs;
   final RxBool _isDefFocused = false.obs;
+  late final draft = controller.flashcardDrafts[widget.index];
 
   @override
   void initState() {
@@ -163,6 +164,8 @@ class _CreateFlashcardItemState extends State<CreateFlashcardItem> {
                     fontSize: 14.sp,
                   ),
                   controller: widget.terminologyController,
+                  onChanged: (value) =>
+                      controller.onTerminologyChanged(widget.index, value),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: AppColor.fillColor(context),
@@ -184,6 +187,15 @@ class _CreateFlashcardItemState extends State<CreateFlashcardItem> {
                     ),
                   ),
                 ),
+                Obx(() {
+                  if (draft.isGenerating.value) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: const LinearProgressIndicator(minHeight: 2),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }),
                 SizedBox(height: 16.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -252,6 +264,32 @@ class _CreateFlashcardItemState extends State<CreateFlashcardItem> {
                     ),
                   ),
                 ),
+                SizedBox(height: 8.h),
+                Obx(() {
+                  if (draft.suggestions.isEmpty) return const SizedBox.shrink();
+                  return Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: draft.suggestions.map((sug) {
+                      return ActionChip(
+                        label: Text(
+                          sug,
+                          style: GoogleFonts.beVietnamPro(
+                            fontSize: 12.sp,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black87,
+                          ),
+                        ),
+                        backgroundColor: const Color(0xff5038ED).withOpacity(0.1),
+                        onPressed: () {
+                          widget.definitionController.text = sug;
+                          draft.suggestions.clear();
+                        },
+                      );
+                    }).toList(),
+                  );
+                }),
               ],
             ),
           ],

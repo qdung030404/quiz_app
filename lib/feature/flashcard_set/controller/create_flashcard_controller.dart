@@ -1,14 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quiz_app/core/service/gemini_service.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
-import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
-import 'package:quiz_app/feature/flashcard_set/controller/flashcard_controller.dart';
 import 'package:quiz_app/feature/flashcard_set/view/create_set_settings.dart';
 
 class FlashCardDraft {
   final TextEditingController terminologyController;
   final TextEditingController definitionController;
+  final RxList<String> suggestions = <String>[].obs;
+  final RxBool isGenerating = false.obs;
 
   FlashCardDraft({
     TextEditingController? term,
@@ -24,10 +27,11 @@ class FlashCardDraft {
 
 class CreateFlashcardController extends GetxController {
   final FlashcardRepository _flashcardRepository = FlashcardRepository();
+  final GeminiService _geminiService = GeminiService();
 
   final TextEditingController titleController = TextEditingController();
   final RxList<FlashCardDraft> flashcardDrafts = <FlashCardDraft>[].obs;
-  
+
   // Key điều khiển AnimatedList
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
@@ -35,6 +39,8 @@ class CreateFlashcardController extends GetxController {
   final definitionLanguage = Rxn<SelectLanguage>();
   final RxBool isPublic = false.obs;
   final RxBool isLoading = false.obs;
+  final RxBool isSwitched = true.obs;
+  Timer? _debounce;
 
   @override
   void onInit() {
@@ -71,6 +77,54 @@ class CreateFlashcardController extends GetxController {
       );
     } else {
       Get.snackbar('Thông báo', 'Bộ thẻ cần tối thiểu 2 thẻ bài');
+    }
+  }
+  void toggleSwitch(bool value) {
+    isSwitched.value = value;
+  }
+  void onTerminologyChanged(int index, String value) {
+    if (!isSwitched.value || value.trim().isEmpty) return;
+
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 1500), () {
+      autoFillDefinition(index);
+    });
+  }
+
+  Future<void> autoFillDefinition(int index) async {
+    final draft = flashcardDrafts[index];
+    final term = draft.terminologyController.text.trim();
+    if (term.isEmpty) return;
+
+    try {
+      draft.isGenerating.value = true;
+      final termLang = terminologyLanguage.value?.title ?? 'English';
+      final defLang = definitionLanguage.value?.title ?? 'Vietnamese';
+
+      final result = await _geminiService.generateDefinitions(
+        word: term,
+        terminologyLanguage: termLang,
+        definitionLanguage: defLang,
+      );
+
+      if (result != null) {
+        String rawDefinitions = result.contains(':')
+            ? result.split(':').last
+            : result;
+
+        List<String> parsedList = rawDefinitions
+            .split(',')
+            .map((e) => e.trim())
+            .take(3)
+            .toList();
+
+        draft.suggestions.assignAll(parsedList);
+      }
+    } catch (e) {
+      print('Error auto-filling definition: $e');
+    } finally {
+      draft.isGenerating.value = false;
     }
   }
 
@@ -140,10 +194,24 @@ class CreateFlashcardController extends GetxController {
 
   @override
   void onClose() {
+    _debounce?.cancel();
     titleController.dispose();
     for (var draft in flashcardDrafts) {
       draft.dispose();
     }
     super.onClose();
   }
+}
+
+class SelectLanguage {
+  final String id;
+  final String title;
+
+  SelectLanguage({required this.id, required this.title});
+
+  static final List<SelectLanguage> selectLanguage = [
+    SelectLanguage(id: 'vi', title: 'Tiếng Việt'),
+    SelectLanguage(id: 'en', title: 'Tiếng Anh'),
+    SelectLanguage(id: 'de', title: 'Tiếng Đức'),
+  ];
 }

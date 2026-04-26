@@ -125,6 +125,31 @@ class _CreateSetSettingsState extends State<CreateSetSettings> {
                 ],
               ),
             ),
+            SizedBox(height: 16.h),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? const Color(0xff2d17d3)
+                  : Colors.grey.shade500,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child:Text(
+                      'Tự đông gợi ý',
+                      style: GoogleFonts.beVietnamPro(fontSize: 16.sp),
+                    ),
+                  ),
+                  Obx(
+                    () => Switch(
+                      value: controller.isSwitched.value,
+                      onChanged: controller.toggleSwitch,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
