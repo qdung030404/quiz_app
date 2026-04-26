@@ -137,15 +137,3 @@ class FlashcardController extends GetxController {
   }
 }
 
-class SelectLanguage {
-  final String id;
-  final String title;
-
-  SelectLanguage({required this.id, required this.title});
-
-  static final List<SelectLanguage> selectLanguage = [
-    SelectLanguage(id: 'vi', title: 'Tiếng Việt'),
-    SelectLanguage(id: 'en', title: 'Tiếng Anh'),
-    SelectLanguage(id: 'de', title: 'Tiếng Đức'),
-  ];
-}
