@@ -159,6 +159,12 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
                 icon: Image.asset('assets/image/quiz.png'),
                 onTap: () {},
               ),
+              SizedBox(height: 12.h),
+              FeatureItem(
+                title: 'Match',
+                icon: Image.asset('assets/image/match.png'),
+                onTap: () => _controller.matchGame() ,
+              ),
               SizedBox(height: 16.h),
             ],
           ),

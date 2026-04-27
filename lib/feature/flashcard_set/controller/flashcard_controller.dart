@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
-import 'package:quiz_app/feature/flashcard_set/view/create_set_settings.dart';
 import 'package:quiz_app/feature/flashcard_set/view/learn_flashcard/learn_flashcard.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:quiz_app/feature/match/view/start_screen.dart';
 
 
 class FlashcardController extends GetxController {
@@ -130,7 +130,11 @@ class FlashcardController extends GetxController {
     transition: Transition.fadeIn,
     duration: const Duration(milliseconds: 300),
   );
-
+  void matchGame() => Get.to(
+        () => StartScreen(),
+    transition: Transition.fadeIn,
+    duration: const Duration(milliseconds: 300),
+  );
   @override
   void onClose() {
     super.onClose();
