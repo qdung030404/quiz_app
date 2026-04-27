@@ -47,6 +47,7 @@ dependencies:
   flutter_card_swiper: ^7.2.0
   flutter_tts: ^4.2.5
   http: ^1.6.0
+  audioplayers: ^6.6.0
 
 
 dev_dependencies:
@@ -80,6 +81,8 @@ flutter:
      - assets/image/flashcards.png
      - assets/image/learn.png
      - assets/image/quiz.png
+     - assets/image/match.png
+     - assets/audio/match_background_audio.mp3
 
   # An image assets can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
