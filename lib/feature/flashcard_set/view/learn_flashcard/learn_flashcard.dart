@@ -9,6 +9,7 @@ import 'package:quiz_app/feature/flashcard_set/view/learn_flashcard/result_scree
 import '../../../../data/models/flashcard_set_model.dart';
 import '../../controller/flashcard_controller.dart';
 import '../../widget/detail_widget/flash_card_item.dart';
+import '../../widget/detail_widget/learn_flashcard_bottomsheet.dart';
 
 class LearnFlashcard extends StatefulWidget {
   final FlashCardSetModel flashcardSet;
@@ -49,7 +50,20 @@ class _LearnFlashcardState extends State<LearnFlashcard> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.settings_outlined)),
+          IconButton(
+            onPressed: () {
+              Get.bottomSheet(
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: LearnFlashcardBottomsheet(),
+                ),
+                backgroundColor: Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xff20098a)
+                    : Colors.white,
+              );
+            },
+            icon: Icon(Icons.settings_outlined),
+          ),
         ],
       ),
       child: Column(

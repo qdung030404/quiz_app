@@ -110,6 +110,7 @@ class ResultScreen extends StatelessWidget {
                 _buildButton(context, Colors.transparent, 'Đặt lại thẻ ghi nhớ', () {
                   controller.resetAll();
                   Get.back();
+                  controller.isTerm.value = true;
                 }),
               ],
             ),

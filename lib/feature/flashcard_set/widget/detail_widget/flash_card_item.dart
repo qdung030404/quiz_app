@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
 import 'package:quiz_app/feature/flashcard_set/controller/flashcard_controller.dart';
@@ -79,13 +78,13 @@ class _FlashCardItemState extends State<FlashCardItem> with SingleTickerProvider
         borderRadius: BorderRadius.circular(15),
       ),
       child: Center(
-        child: Text(
-          widget.flashCardModel.terminology,
+        child: Obx(() => Text(
+          controller.isTerm.value ? widget.flashCardModel.terminology : widget.flashCardModel.definition,
           style: GoogleFonts.beVietnamPro(
             fontWeight: FontWeight.normal,
             fontSize: 28.sp,
           ),
-        ),
+        ),)
       ),
     );
   }
@@ -101,13 +100,13 @@ class _FlashCardItemState extends State<FlashCardItem> with SingleTickerProvider
           borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
-          child: Text(
-            widget.flashCardModel.definition,
+          child: Obx(() => Text(
+            controller.isTerm.value ? widget.flashCardModel.definition : widget.flashCardModel.terminology,
             style: GoogleFonts.beVietnamPro(
               fontWeight: FontWeight.normal,
               fontSize: 28.sp,
             ),
-          ),
+          ),)
         ),
       ),
     );
