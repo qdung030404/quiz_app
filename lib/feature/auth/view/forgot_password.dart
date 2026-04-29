@@ -12,37 +12,51 @@ class ForgotPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthController controller = Get.put(AuthController());
 
-    return Scaffold(
-      appBar: AppBar(
+    return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [ Color(0xFF1A1A2E), Color(0xFF7C4DFF)],
+              stops: [0.8, 1.0],
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ),
+          ),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: Text(
-          'Quên mật khẩu',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          title: Text(
+            'Quên mật khẩu',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+          ),
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back),
+          ),
         ),
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: IntrinsicHeight(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: Center(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height: 100.h,
+                        child: Image.asset(
+                          'assets/image/icon_logo.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       TextFormField(
                         controller: controller.emailController,
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColor.fillColor(context),
+                          fillColor: Colors.white.withOpacity(0.1),
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 16.h,
@@ -52,59 +66,58 @@ class ForgotPasswordScreen extends StatelessWidget {
                             fontSize: 16.sp,
                             fontWeight: FontWeight.bold,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide(
-                              color: AppColor.borderColor(context),
-                              width: 2.0,
-                            ),
-                          ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(50.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                            borderSide: BorderSide(
+                              color: Colors.white.withOpacity(0.1),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 20),
                       Obx(
-                        () => controller.forgotPasswordLoading.value
+                            () => controller.forgotPasswordLoading.value
                             ? const Center(child: CircularProgressIndicator())
                             : SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xff2A1896),
-                                    disabledBackgroundColor: Colors.grey,
-                                    disabledForegroundColor: Colors.white,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 16,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                  ),
-                                  onPressed: controller.isFormValid.value
-                                      ? () => controller.sendPasswordReset()
-                                      : null,
-                                  child: Text(
-                                    'Xác nhận',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16.sp,
-                                    ),
-                                  ),
-                                ),
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff7C4DFF),
+                              disabledBackgroundColor: Colors.grey,
+                              disabledForegroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
                               ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            onPressed: controller.isFormValid.value
+                                ? () => controller.sendPasswordReset()
+                                : null,
+                            child: Text(
+                              'Xác nhận',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
+              )
+            );
+          },
+        ),
+      )
     );
   }
 }

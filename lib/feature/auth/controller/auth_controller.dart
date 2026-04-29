@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../core/service/auth_service.dart';
-import '../../bottom_navigation_bar/view/bottom_navigation_bar.dart';
-import '../../intro/view/intro.dart';
+import 'package:quiz_app/core/service/auth_service.dart';
+import 'package:quiz_app/feature/auth/view/forgot_password.dart';
+import 'package:quiz_app/feature/auth/view/login_screen.dart';
+import 'package:quiz_app/feature/auth/view/register_screen.dart';
+import 'package:quiz_app/feature/bottom_navigation_bar/view/bottom_navigation_bar.dart';
 
 class AuthController extends GetxController {
   final AuthService _authService = AuthService();
@@ -115,7 +116,7 @@ class AuthController extends GetxController {
         colorText: Colors.white,
       );
       await _authService.signOut();
-      Get.offAll(() => const Intro());
+      Get.offAll(() => const LoginScreen());
     } else {
       Get.snackbar(
         'Lỗi',
@@ -170,6 +171,10 @@ class AuthController extends GetxController {
       );
     }
   }
+
+  void navigateToRegister() => Get.to(() => const RegisterScreen());
+
+  void navigateToForgotPassword() => Get.to(() => const ForgotPasswordScreen());
 
   @override
   void onClose() {
