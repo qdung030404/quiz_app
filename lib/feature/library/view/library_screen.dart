@@ -17,35 +17,46 @@ class LibraryTab extends StatelessWidget {
     final controller = Get.put(LibraryController());
 
     return BaseScreen(
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          elevation: 0,
           title: Text(
             'Thư viện',
-            style: GoogleFonts.beVietnamPro(
+            style: GoogleFonts.spaceGrotesk(
               fontWeight: FontWeight.bold,
-              fontSize: 20.sp,
+              fontSize: 24.sp,
             ),
           ),
         ),
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.r),
+          padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 100.h),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               LibraryCategories(),
-              SizedBox(height: 16.h),
+              SizedBox(height: 24.h),
               Obx(() {
-                // Hiển thị loading
                 if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                    height: 200.h,
+                    child: const Center(child: CircularProgressIndicator(color: Colors.white70)),
+                  );
                 }
 
                 final selectedId = controller.selectedCategory.value.id;
 
-                // Hiển thị danh sách theo mục đang chọn
                 if (selectedId == 'flashcard_set') {
                   if (controller.flashcardSet.isEmpty) {
-                    return const Center(child: Text('Bạn chưa có bộ thẻ nào!'));
+                    return SizedBox(
+                      height: 200.h,
+                      child: Center(
+                        child: Text(
+                          'Bạn chưa có bộ thẻ nào!',
+                          style: GoogleFonts.inter(color: Colors.white54),
+                        ),
+                      ),
+                    );
                   }
                   return FlashcardsetsList(
                     flashcardSets: controller.flashcardSet,
@@ -53,7 +64,15 @@ class LibraryTab extends StatelessWidget {
                   );
                 } else {
                   if (controller.folder.isEmpty) {
-                    return const Center(child: Text('Bạn chưa có thư mục nào!'));
+                    return SizedBox(
+                      height: 200.h,
+                      child: Center(
+                        child: Text(
+                          'Bạn chưa có thư mục nào!',
+                          style: GoogleFonts.inter(color: Colors.white54),
+                        ),
+                      ),
+                    );
                   }
                   return FolderList(
                     folders: controller.folder,

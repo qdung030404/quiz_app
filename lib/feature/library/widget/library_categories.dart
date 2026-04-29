@@ -1,11 +1,11 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/core/theme/app_color.dart';
 import 'package:quiz_app/feature/library/controller/library_controller.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class LibraryCategories extends StatelessWidget {
   const LibraryCategories({super.key});
@@ -15,8 +15,9 @@ class LibraryCategories extends StatelessWidget {
     final LibraryController controller = Get.find<LibraryController>();
     final categories = LibraryCategory.libraryCategories;
 
-    return SizedBox(
-      height: 40.h,
+    return Container(
+      height: 50.h,
+      padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Obx(() {
         controller.selectedCategory.value;
         return ListView.builder(
@@ -28,25 +29,37 @@ class LibraryCategories extends StatelessWidget {
 
             return GestureDetector(
               onTap: () => controller.changeCategory(item),
-              child: Container(
+              child: AnimatedContainer(
+                duration: 300.ms,
                 margin: EdgeInsets.only(right: 12.w),
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
+                  color: isSelected
+                      ? const Color(0xff9181F4).withOpacity(0.8)
+                      : Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(25.r),
                   border: Border.all(
-                    color: AppColor.borderColor(context),
-                    width: isSelected ? 2 : 1,
+                    color: isSelected
+                        ? Colors.white.withOpacity(0.3)
+                        : Colors.white.withOpacity(0.1),
+                    width: 1,
                   ),
-                  color: isSelected ? AppColor.fillColor(context) : Colors
-                      .transparent,
-                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xff9181F4).withOpacity(0.3),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          )
+                        ]
+                      : [],
                 ),
                 child: Text(
                   item.title,
-                  style: GoogleFonts.beVietnamPro(
+                  style: GoogleFonts.spaceGrotesk(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16.sp,
-                    color: isSelected ? Colors.white : Colors.white70,
+                    fontSize: 15.sp,
                   ),
                 ),
               ),
