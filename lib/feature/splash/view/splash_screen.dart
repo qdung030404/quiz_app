@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
 
     return const Scaffold(
       backgroundColor: Colors.deepPurpleAccent,
-      body: Center(child: FlutterLogo(size: 100)),
+      body: Center(child: Image(image: AssetImage('assets/image/splash_logo.png'))),
     );
   }
 }
