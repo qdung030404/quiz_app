@@ -33,10 +33,11 @@ class FlashcardRepository {
   }
 
   /// 2. Lấy danh sách Thẻ bài của một Bộ thẻ cụ thể
-  Future<List<FlashCardModel>> getCardsInSet(String setId) async {
+  Future<List<FlashCardModel>> getCardsInSet(String setId, {bool isPublic = false}) async {
     try {
+      final tableName = isPublic ? 'public_cards' : 'flashcards';
       final response = await _supabase
-          .from('flashcards')
+          .from(tableName)
           .select('*')
           .eq('set_id', setId)
           .order('created_at', ascending: true);

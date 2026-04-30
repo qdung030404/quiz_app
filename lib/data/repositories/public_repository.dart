@@ -7,7 +7,7 @@ class PublicRepository {
 
   Future<List<PublicFolderModel>> getPublicFolders() async {
     try {
-      final response = await _supabase.from('public_folders').select('*');
+      final response = await _supabase.from('public_folders').select('*, public_sets(count)');
       return (response as List)
           .map((json) => PublicFolderModel.fromJson(json))
           .toList();
