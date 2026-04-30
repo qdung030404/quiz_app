@@ -22,15 +22,15 @@ class FlashCardModel {
   /// Chuyển đổi từ JSON (Supabase) sang Model
   factory FlashCardModel.formJson(Map<String, dynamic> json) {
     return FlashCardModel(
-      id: json['id'] as String,
-      setId: json['set_id'] as String,
-      userId: json['user_id'] as String,
-      terminology: json['terminology'] as String,
-      terminologyLanguage: json['terminology_language'] as String? ?? 'en',
-      definition: json['definition'] as String,
-      definitionLanguage: json['definition_language'] as String? ?? 'vi',
+      id: json['id']?.toString(),
+      setId: json['set_id']?.toString() ?? '',
+      userId: json['user_id']?.toString(), // Tùy chọn vì public_cards không có user_id
+      terminology: json['terminology']?.toString() ?? '',
+      terminologyLanguage: json['terminology_language']?.toString() ?? 'en',
+      definition: json['definition']?.toString() ?? '',
+      definitionLanguage: json['definition_language']?.toString() ?? 'vi',
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
+          ? DateTime.tryParse(json['created_at'].toString())
           : null,
     );
   }
