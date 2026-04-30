@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quiz_app/data/models/public_set_model.dart';
-import 'package:quiz_app/feature/home/controller/home_controller.dart';
+import 'package:quiz_app/data/models/public_folder_model.dart';
+
+import '../controller/home_controller.dart';
 
 class Discovery extends StatelessWidget {
-  final List<PublicSetModel> publicSet;
-  const Discovery({super.key, required this.publicSet});
+  final List<PublicFolderModel> publicFolder;
+  const Discovery({super.key, required this.publicFolder});
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +19,11 @@ class Discovery extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.25,
       child: PageView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: publicSet.length,
+          itemCount: publicFolder.length,
           itemBuilder: (context, index) {
-            final set = publicSet[index];
+            final folder = publicFolder[index];
             return GestureDetector(
-              onTap: () => controller.goToFlashcardDetailFromPublic(set),
+              onTap: () => controller.goToListSetInPublicFolder(folder),
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 15.w),
                 decoration: BoxDecoration(
@@ -61,7 +63,7 @@ class Discovery extends StatelessWidget {
                           ),
                           const Spacer(),
                           Text(
-                             set.title,
+                             folder.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.beVietnamPro(
@@ -72,7 +74,7 @@ class Discovery extends StatelessWidget {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            '${set.totalCards} thẻ',
+                            '${folder.setCount ?? 0} bộ',
                             style: GoogleFonts.beVietnamPro(
                               color: Colors.white70,
                               fontSize: 12.sp,

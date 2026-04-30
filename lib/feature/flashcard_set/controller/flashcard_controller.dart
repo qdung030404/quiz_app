@@ -145,7 +145,8 @@ class FlashcardController extends GetxController {
       loading.value = true;
       cardInSet.clear();
       currentSet.value = set;
-      final cards = await _flashcardRepository.getCardsInSet(set.id!);
+      isPublic.value = set.isPublic;
+      final cards = await _flashcardRepository.getCardsInSet(set.id!, isPublic: set.isPublic);
       cardInSet.value = List.from(cards);
       isShuffle.value = false;
       learnCards.value = List.from(cards);

@@ -1,11 +1,14 @@
 import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
+import 'package:quiz_app/data/models/public_folder_model.dart';
 import 'package:quiz_app/data/models/public_set_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
 import 'package:quiz_app/data/repositories/profile_repository.dart';
 import 'package:quiz_app/data/repositories/public_repository.dart';
 import 'package:quiz_app/feature/bottom_navigation_bar/controller/nav_controller.dart';
+import 'package:quiz_app/feature/home/view/public_flashcard_set_list.dart';
 import 'package:quiz_app/feature/library/view/library_screen.dart';
+import 'package:quiz_app/feature/library/widget/flashcardSets_list.dart';
 import 'package:quiz_app/feature/profile/view/profile_screen.dart';
 
 import '../../flashcard_set/view/flashcard_set_detail_screen.dart';
@@ -19,6 +22,7 @@ class HomeController extends GetxController {
   
   late Stream<List<Map<String, dynamic>>> profileStream;
   var flashcardSets = <FlashCardSetModel>[].obs;
+  final RxList<PublicFolderModel> publicFolder = <PublicFolderModel>[].obs;
   final RxList<PublicSetModel> publicSet = <PublicSetModel>[].obs;
   var isLoading = true.obs;
 
@@ -28,6 +32,7 @@ class HomeController extends GetxController {
     _profileRepository.updateStreak();
     profileStream = _profileRepository.watchCurrentUserProfile();
     fetchFlashcardSets();
+    fetchPublicFolders();
     fetchPublicSets();
   }
 
@@ -40,6 +45,16 @@ class HomeController extends GetxController {
       isLoading(false);
     }
   }
+  Future<void> fetchPublicFolders() async {
+    try {
+      isLoading(true);
+      final folders = await _publicRepository.getPublicFolders();
+      publicFolder.assignAll(folders);
+    } finally {
+      isLoading(false);
+    }
+  }
+
   Future<void> fetchPublicSets() async {
     try {
       isLoading(true);
@@ -60,5 +75,27 @@ class HomeController extends GetxController {
   }
   void goToFlashcardDetail(FlashCardSetModel set) {
     Get.to(() => FlashcardSetDetailScreen(flashcardSet: set));
+  }
+
+  void goToFlashcardDetailFromPublic(PublicSetModel publicSet) {
+    print('DEBUG: Public Set "${publicSet.title}" có ${publicSet.totalCards} thẻ.');
+    if (publicSet.cards != null) {
+      print('DEBUG: Danh sách cards thực tế: ${publicSet.cards!.length}');
+    }
+
+    final set = FlashCardSetModel(
+      id: publicSet.id,
+      title: publicSet.title,
+      cardCount: publicSet.totalCards,
+      isPublic: true,
+    );
+    Get.to(() => FlashcardSetDetailScreen(flashcardSet: set));
+  }
+
+  void goToListSetInPublicFolder(PublicFolderModel folder) {
+    Get.to(() => PublicFlashcardSetList(
+          folders: [folder],
+          sets: publicSet.where((s) => s.publicFolderId == folder.id).toList(),
+        ));
   }
 }

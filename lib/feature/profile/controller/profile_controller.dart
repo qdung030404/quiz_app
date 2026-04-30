@@ -10,5 +10,5 @@ class ProfileController extends GetxController {
     return _profileRepository.watchCurrentUserProfile();
   }
 
-  void goToSetting() => Get.to(() => const SettingScreen());
+  void goToSetting() => Get.to(() {});
 }

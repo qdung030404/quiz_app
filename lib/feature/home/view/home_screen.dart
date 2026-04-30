@@ -124,14 +124,14 @@ class HomeTab extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Obx(() {
-              if (controller.publicSet.isEmpty) {
+              if (controller.publicFolder.isEmpty) {
                 return SizedBox(
                   height: 150.h,
                   child: const Center(
                       child: CircularProgressIndicator(color: Colors.white70)),
                 );
               }
-              return Discovery(publicSet: controller.publicSet);
+              return Discovery(publicFolder: controller.publicFolder);
             }),
           ),
           SliverToBoxAdapter(child: SizedBox(height: 100,),)

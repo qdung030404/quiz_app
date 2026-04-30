@@ -84,92 +84,94 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
           ),
         ],
       ),
-      child: Column(
-        children: [
-          Obx(() {
-            if (_controller.loading.value) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return Column(
-              children: [
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: PageView.builder(
-                    scrollDirection: Axis.horizontal,
-                    controller: PageController(viewportFraction: 0.9),
-                    itemCount: _controller.cardInSet.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: FlashCardItem(
-                          flashCardModel: _controller.cardInSet[index],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          }),
-          SizedBox(height: 28.h),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.symmetric(horizontal: 28.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.flashcardSet.title,
-                  style: GoogleFonts.beVietnamPro(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28.sp,
-                  ),
-                ),
-                Obx(
-                  () => Text(
-                    '${_controller.cardInSet.length} thẻ',
-                    style: GoogleFonts.beVietnamPro(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.sp,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Obx(() {
+              if (_controller.loading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return Column(
+                children: [
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    child: PageView.builder(
+                      scrollDirection: Axis.horizontal,
+                      controller: PageController(viewportFraction: 0.9),
+                      itemCount: _controller.cardInSet.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: FlashCardItem(
+                            flashCardModel: _controller.cardInSet[index],
+                          ),
+                        );
+                      },
                     ),
                   ),
+                ],
+              );
+            }),
+            SizedBox(height: 28.h),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric(horizontal: 28.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.flashcardSet.title,
+                    style: GoogleFonts.beVietnamPro(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 28.sp,
+                    ),
+                  ),
+                  Obx(
+                        () => Text(
+                      '${_controller.cardInSet.length} thẻ',
+                      style: GoogleFonts.beVietnamPro(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 28.h),
+            Column(
+              children: [
+                FeatureItem(
+                  title: 'Flashcards',
+                  icon: Image.asset('assets/image/flashcards.png'),
+                  onTap: () => _controller.goToFlashcard(widget.flashcardSet),
                 ),
+                SizedBox(height: 12.h),
+                FeatureItem(
+                  title: 'Learn',
+                  icon: Image.asset('assets/image/learn.png'),
+                  onTap: () {},
+                ),
+                SizedBox(height: 12.h),
+                FeatureItem(
+                  title: 'Quiz',
+                  icon: Image.asset('assets/image/quiz.png'),
+                  onTap: () {},
+                ),
+                SizedBox(height: 12.h),
+                FeatureItem(
+                  title: 'Match',
+                  icon: Image.asset('assets/image/match.png'),
+                  onTap: () => _controller.matchGame() ,
+                ),
+                SizedBox(height: 16.h),
               ],
             ),
-          ),
-          SizedBox(height: 28.h),
-          Column(
-            children: [
-              FeatureItem(
-                title: 'Flashcards',
-                icon: Image.asset('assets/image/flashcards.png'),
-                onTap: () => _controller.goToFlashcard(widget.flashcardSet),
-              ),
-              SizedBox(height: 12.h),
-              FeatureItem(
-                title: 'Learn',
-                icon: Image.asset('assets/image/learn.png'),
-                onTap: () {},
-              ),
-              SizedBox(height: 12.h),
-              FeatureItem(
-                title: 'Quiz',
-                icon: Image.asset('assets/image/quiz.png'),
-                onTap: () {},
-              ),
-              SizedBox(height: 12.h),
-              FeatureItem(
-                title: 'Match',
-                icon: Image.asset('assets/image/match.png'),
-                onTap: () => _controller.matchGame() ,
-              ),
-              SizedBox(height: 16.h),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 }

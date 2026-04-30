@@ -19,8 +19,6 @@ class LibraryController extends GetxController {
 
   final isLoading = false.obs;
 
-  int get totalCards => flashcardSet.fold(0, (sum, set) => sum + set.cardCount);
-
   @override
   void onInit() {
     super.onInit();
