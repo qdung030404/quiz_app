@@ -26,15 +26,6 @@ class GeminiService {
     }
   }
 
-  Future<String?> generateFlashcards(String topic) async {
-    final prompt = '''
-      Generate 5 flashcards for the topic: $topic.
-      Format the output as a JSON list of objects, each with "front" and "back" keys.
-      Return ONLY the JSON.
-    ''';
-    return generateContent(prompt);
-  }
-
   Future<String?> generateDefinitions({
     required String word,
     required String terminologyLanguage,
