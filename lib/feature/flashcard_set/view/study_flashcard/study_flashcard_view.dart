@@ -4,23 +4,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quiz_app/core/theme/app_color.dart';
 import 'package:quiz_app/core/widgets/base_screen.dart';
-import 'package:quiz_app/feature/flashcard_set/view/learn_flashcard/result_screen.dart';
+import 'package:quiz_app/feature/flashcard_set/view/study_flashcard/result_screen.dart';
 
 import '../../../../data/models/flashcard_set_model.dart';
 import '../../controller/flashcard_controller.dart';
 import '../../widget/detail_widget/flash_card_item.dart';
-import '../../widget/detail_widget/learn_flashcard_bottomsheet.dart';
+import '../../widget/detail_widget/flashcard_study_bottomsheet.dart';
 
-class LearnFlashcard extends StatefulWidget {
+class StudyFlashcardView extends StatefulWidget {
   final FlashCardSetModel flashcardSet;
 
-  const LearnFlashcard({super.key, required this.flashcardSet});
+  const StudyFlashcardView({super.key, required this.flashcardSet});
 
   @override
-  State<LearnFlashcard> createState() => _LearnFlashcardState();
+  State<StudyFlashcardView> createState() => _StudyFlashcardViewState();
 }
 
-class _LearnFlashcardState extends State<LearnFlashcard> {
+class _StudyFlashcardViewState extends State<StudyFlashcardView> {
   final FlashcardController _controller = Get.put(FlashcardController());
 
   @override
@@ -55,7 +55,7 @@ class _LearnFlashcardState extends State<LearnFlashcard> {
               Get.bottomSheet(
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child: LearnFlashcardBottomsheet(),
+                  child: FlashcardStudyBottomsheet(),
                 ),
                 backgroundColor: Theme.of(context).brightness == Brightness.dark
                     ? const Color(0xff20098a)

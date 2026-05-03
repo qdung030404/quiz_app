@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/feature/flashcard_set/controller/flashcard_controller.dart';
 
-class LearnFlashcardBottomsheet extends StatelessWidget {
-  const LearnFlashcardBottomsheet({super.key});
+class FlashcardStudyBottomsheet extends StatelessWidget {
+  const FlashcardStudyBottomsheet({super.key});
 
   @override
   Widget build(BuildContext context) {

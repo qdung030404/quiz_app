@@ -24,7 +24,7 @@ class FlashCardModel {
     return FlashCardModel(
       id: json['id']?.toString(),
       setId: json['set_id']?.toString() ?? '',
-      userId: json['user_id']?.toString(), // Tùy chọn vì public_cards không có user_id
+      userId: json['user_id']?.toString(), // Tùy chọn với public_cards
       terminology: json['terminology']?.toString() ?? '',
       terminologyLanguage: json['terminology_language']?.toString() ?? 'en',
       definition: json['definition']?.toString() ?? '',

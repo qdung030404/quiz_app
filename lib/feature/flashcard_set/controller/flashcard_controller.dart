@@ -3,8 +3,11 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
 import 'package:quiz_app/data/models/flashcard_set_model.dart';
+import 'package:quiz_app/data/models/learn_question.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
-import 'package:quiz_app/feature/flashcard_set/view/learn_flashcard/learn_flashcard.dart';
+import 'package:quiz_app/feature/flashcard_set/view/learn_mode/learn_mode_screen.dart';
+import 'package:quiz_app/feature/flashcard_set/view/learn_mode/learn_result_screen.dart';
+import 'package:quiz_app/feature/flashcard_set/view/study_flashcard/study_flashcard_view.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:quiz_app/feature/match/view/start_screen.dart';
 
@@ -41,6 +44,15 @@ class FlashcardController extends GetxController {
   final RxList<FlashCardModel> sessionCards = <FlashCardModel>[].obs;
   final RxInt currentCardIndex = 0.obs;
   final FlutterTts tts = FlutterTts();
+
+  // Learn Mode State
+  final RxList<LearnQuestion> learnQuestions = <LearnQuestion>[].obs;
+  final RxInt currentQuestionIndex = 0.obs;
+  final RxBool showFeedback = false.obs;
+  final RxBool isCorrect = false.obs;
+  final RxString selectedAnswer = ''.obs;
+  final RxInt correctLearnCount = 0.obs;
+  final RxInt wrongLearnCount = 0.obs;
 
   @override
   void onInit() {
@@ -160,8 +172,8 @@ class FlashcardController extends GetxController {
   }
 
 
-  void goToFlashcard(FlashCardSetModel selectedSet) => Get.to(
-    () => LearnFlashcard(flashcardSet: selectedSet),
+  void goToStudyFlashcard(FlashCardSetModel selectedSet) => Get.to(
+    () => StudyFlashcardView(flashcardSet: selectedSet),
     transition: Transition.fadeIn,
     duration: const Duration(milliseconds: 300),
   );
@@ -170,9 +182,114 @@ class FlashcardController extends GetxController {
     transition: Transition.fadeIn,
     duration: const Duration(milliseconds: 300),
   );
-  @override
-  void onClose() {
-    super.onClose();
+
+  //Learn Mode Methods
+
+  void goToLearnMode(FlashCardSetModel set) {
+    generateLearnQuestions();
+    Get.to(() => LearnModeScreen(flashcardSet: set)); 
+  }
+
+  void generateLearnQuestions() {
+    learnQuestions.clear();
+    correctLearnCount.value = 0;
+    wrongLearnCount.value = 0;
+    currentQuestionIndex.value = 0;
+    showFeedback.value = false;
+
+    final allCards = List<FlashCardModel>.from(cardInSet);
+    
+    for (var card in allCards) {
+      // 1. Multiple Choice Question
+      final options = _generateOptions(card, allCards);
+      learnQuestions.add(LearnQuestion(
+        cardId: card.id ?? '',
+        question: card.terminology,
+        correctAnswer: card.definition,
+        type: QuestionType.multipleChoice,
+        options: options,
+      ));
+
+      // 2. Writing Question
+      learnQuestions.add(LearnQuestion(
+        cardId: card.id ?? '',
+        question: card.terminology,
+        correctAnswer: card.definition,
+        type: QuestionType.writing,
+      ));
+    }
+
+    learnQuestions.shuffle();
+  }
+
+  List<String> _generateOptions(FlashCardModel correctCard, List<FlashCardModel> allCards) {
+    List<String> options = [correctCard.definition];
+    
+    // Get distractors (other definitions)
+    List<String> distractors = allCards
+        .where((c) => c.id != correctCard.id)
+        .map((c) => c.definition)
+        .toSet() // Unique definitions
+        .toList();
+    
+    distractors.shuffle();
+    
+    // Add up to 3 distractors
+    options.addAll(distractors.take(3));
+    
+    // If not enough distractors from the set, maybe add some fillers (though usually we have enough)
+    
+    options.shuffle();
+    return options;
+  }
+
+  void checkAnswer(String answer) {
+    if (showFeedback.value) return;
+
+    final currentQ = learnQuestions[currentQuestionIndex.value];
+    selectedAnswer.value = answer;
+    
+    // Normalize for writing
+    bool correct = false;
+    if (currentQ.type == QuestionType.writing) {
+      final userAnswer = answer.trim().toLowerCase();
+      
+      // Smart split: split by comma, and also handle text in parentheses
+      // Example: "考慮 (こうりょ) (Kouryo)" -> ["考慮", "こうりょ", "Kouryo"]
+      final correctAnswers = currentQ.correctAnswer
+          .replaceAll('(', ',')
+          .replaceAll(')', ',')
+          .replaceAll('（', ',')
+          .replaceAll('）', ',')
+          .split(',')
+          .map((e) => e.trim().toLowerCase())
+          .where((e) => e.isNotEmpty)
+          .toList();
+      
+      correct = correctAnswers.contains(userAnswer);
+    } else {
+      correct = answer == currentQ.correctAnswer;
+    }
+
+    isCorrect.value = correct;
+    if (correct) {
+      correctLearnCount.value++;
+    } else {
+      wrongLearnCount.value++;
+    }
+
+    showFeedback.value = true;
+  }
+
+  void nextQuestion() {
+    if (currentQuestionIndex.value < learnQuestions.length - 1) {
+      currentQuestionIndex.value++;
+      showFeedback.value = false;
+      selectedAnswer.value = '';
+    } else {
+      // End of session
+      Get.to(() => LearnResultScreen());
+    }
   }
 }
 
