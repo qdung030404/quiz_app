@@ -1,17 +1,81 @@
-# quiz_app
+# 🧠 Quiz App (In Progress)
 
-A new Flutter project.
+<p align="center">
+  <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
+  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
+</p>
 
-## Getting Started
+## 📖 Giới thiệu (About)
+**Quiz App** là một ứng dụng di động hỗ trợ người dùng học tập và ôn luyện kiến thức thông qua Flashcard và các bài trắc nghiệm. Ứng dụng cung cấp các chế độ học tập đa dạng (Multiple Choice, Typing) để tối ưu hóa khả năng ghi nhớ của người dùng. 
 
-This project is a starting point for a Flutter application.
+*💡 Lưu ý: Dự án hiện đang trong giai đoạn phát triển tích cực (Active Development).*
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## ✨ Tính năng nổi bật (Features)
+- 🔐 **Xác thực người dùng:** Đăng nhập, đăng ký nhanh chóng.
+- 🗂️ **Quản lý Flashcard:** Cho phép người dùng xem tập hợp các bộ Flashcard.
+- 🎓 **Chế độ học tập (Learn Mode):**
+  - **Trắc nghiệm (Multiple Choice):** Trộn câu hỏi và đưa ra bài kiểm tra nhanh.
+  - **Viết (Typing/Writing):** Người dùng nhập đáp án thủ công để tăng cường trí nhớ.
+- 📊 **Theo dõi kết quả:** Hiển thị màn hình kết quả ngay sau khi học.
+- 💫 **Trải nghiệm mượt mà:** UI/UX trực quan với các Custom Transitions.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 🛠️ Công nghệ sử dụng (Tech Stack)
+- **Framework:** Flutter
+- **Ngôn ngữ:** Dart
+- **Quản lý trạng thái (State Management):** GetX
+- **Backend / Cơ sở dữ liệu:** Supabase
+
+---
+
+## 📸 Hình ảnh (Screenshots)
+*(Chèn một số ảnh chụp màn hình ứng dụng của bạn vào thư mục `assets/screenshots` và liên kết ở đây để nhà tuyển dụng có cái nhìn trực quan nhất)*
+
+<p align="center">
+  <img src="https://via.placeholder.com/200x400.png?text=Home+Screen" width="200"/> 
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://via.placeholder.com/200x400.png?text=Flashcard+Screen" width="200"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://via.placeholder.com/200x400.png?text=Learn+Mode" width="200"/>
+</p>
+
+---
+
+## 🚀 Cài đặt và Chạy thử (Getting Started)
+
+1. **Clone dự án về máy:**
+```bash
+git clone https://github.com/TaikhoanCuaBan/quiz_app.git
+```
+
+2. **Cài đặt các gói phụ thuộc (Dependencies):**
+```bash
+cd quiz_app
+flutter pub get
+```
+
+3. **Chạy ứng dụng:**
+```bash
+flutter run
+```
+
+---
+
+## 📂 Kiến trúc thư mục (Folder Structure)
+Dự án được cấu trúc theo tính năng (Feature-based folder structure) giúp code gọn gàng và dễ bảo trì:
+```text
+lib/
+├── data/                # Data layer (Models, Repositories)
+├── feature/
+│   ├── auth/            # Luồng xác thực đăng nhập
+│   ├── flashcard_set/   # Tính năng liên quan đến bộ flashcard & học tập
+│   ├── home/            # Màn hình chính
+│   ├── library/         # Thư viện lưu trữ học tập
+│   └── match/           # (Tính năng game / nối từ...)
+├── core/                # Các utilities dùng chung, theme, const,...
+└── main.dart            # Entry point
+```
+
