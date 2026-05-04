@@ -1,4 +1,4 @@
-# 🧠 Quiz App (In Progress)
+#  QuizBlast (In Progress)
 
 <p align="center">
   <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
@@ -28,39 +28,6 @@
 - **Ngôn ngữ:** Dart
 - **Quản lý trạng thái (State Management):** GetX
 - **Backend / Cơ sở dữ liệu:** Supabase
-
----
-
-## 📸 Hình ảnh (Screenshots)
-*(Chèn một số ảnh chụp màn hình ứng dụng của bạn vào thư mục `assets/screenshots` và liên kết ở đây để nhà tuyển dụng có cái nhìn trực quan nhất)*
-
-<p align="center">
-  <img src="https://via.placeholder.com/200x400.png?text=Home+Screen" width="200"/> 
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://via.placeholder.com/200x400.png?text=Flashcard+Screen" width="200"/>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://via.placeholder.com/200x400.png?text=Learn+Mode" width="200"/>
-</p>
-
----
-
-## 🚀 Cài đặt và Chạy thử (Getting Started)
-
-1. **Clone dự án về máy:**
-```bash
-git clone https://github.com/TaikhoanCuaBan/quiz_app.git
-```
-
-2. **Cài đặt các gói phụ thuộc (Dependencies):**
-```bash
-cd quiz_app
-flutter pub get
-```
-
-3. **Chạy ứng dụng:**
-```bash
-flutter run
-```
 
 ---
 
