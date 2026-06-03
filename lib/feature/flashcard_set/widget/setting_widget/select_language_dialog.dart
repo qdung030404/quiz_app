@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controller/flashcard_controller.dart';
 import '../../controller/create_flashcard_controller.dart';
 
 enum LanguageType { terminology, definition }

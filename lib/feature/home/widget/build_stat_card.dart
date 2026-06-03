@@ -5,7 +5,6 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz_app/feature/home/controller/home_controller.dart';
-import 'package:quiz_app/feature/library/controller/library_controller.dart';
 
 import '../../../core/theme/app_color.dart';
 

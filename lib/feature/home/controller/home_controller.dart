@@ -7,8 +7,6 @@ import 'package:quiz_app/data/repositories/profile_repository.dart';
 import 'package:quiz_app/data/repositories/public_repository.dart';
 import 'package:quiz_app/feature/bottom_navigation_bar/controller/nav_controller.dart';
 import 'package:quiz_app/feature/home/view/public_flashcard_set_list.dart';
-import 'package:quiz_app/feature/library/view/library_screen.dart';
-import 'package:quiz_app/feature/library/widget/flashcardSets_list.dart';
 import 'package:quiz_app/feature/profile/view/profile_screen.dart';
 
 import '../../flashcard_set/view/flashcard_set_detail_screen.dart';

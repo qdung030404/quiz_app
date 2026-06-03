@@ -1,4 +1,4 @@
-enum QuestionType { multipleChoice, writing }
+enum QuestionType { multipleChoice, writing, trueFalse, matching }
 
 class LearnQuestion {
   final String cardId;

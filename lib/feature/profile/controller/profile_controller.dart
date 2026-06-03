@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:quiz_app/data/repositories/profile_repository.dart';
-import 'package:quiz_app/feature/setting/view/setting_screen.dart';
 
 class ProfileController extends GetxController {
   final _profileRepository = ProfileRepository();

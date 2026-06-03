@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,8 +8,6 @@ import 'package:quiz_app/core/theme/app_color.dart';
 import 'package:quiz_app/feature/home/widget/build_stat_card.dart';
 import 'package:quiz_app/feature/home/widget/discovery.dart';
 import 'package:quiz_app/feature/home/widget/recent_flashcards_list.dart';
-import 'package:quiz_app/feature/library/controller/library_controller.dart';
-
 import '../../../core/widgets/base_screen.dart';
 import '../controller/home_controller.dart';
 
