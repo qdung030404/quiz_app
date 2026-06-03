@@ -8,7 +8,9 @@ import 'package:quiz_app/feature/flashcard_set/widget/detail_widget/flashcard_se
 import 'package:quiz_app/feature/flashcard_set/widget/setting_widget/add_set_to_folder_bottomsheet.dart';
 
 import '../controller/flashcard_controller.dart';
+import '../controller/quiz_controller.dart';
 import '../widget/detail_widget/flash_card_item.dart';
+import '../widget/detail_widget/quiz_settings_bottomsheet.dart';
 
 class FlashcardSetDetailScreen extends StatefulWidget {
   final FlashCardSetModel flashcardSet;
@@ -22,6 +24,7 @@ class FlashcardSetDetailScreen extends StatefulWidget {
 
 class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
   final FlashcardController _controller = Get.put(FlashcardController());
+  final QuizController _quizController = Get.put(QuizController());
 
   @override
   void initState() {
@@ -158,7 +161,12 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
                 FeatureItem(
                   title: 'Quiz',
                   icon: Image.asset('assets/image/quiz.png'),
-                  onTap: () {},
+                  onTap: () {
+                    Get.bottomSheet(
+                      QuizSettingsBottomSheet(flashcardSet: widget.flashcardSet),
+                      isScrollControlled: true,
+                    );
+                  },
                 ),
                 SizedBox(height: 12.h),
                 FeatureItem(
