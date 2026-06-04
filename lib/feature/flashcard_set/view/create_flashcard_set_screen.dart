@@ -14,7 +14,11 @@ class CreateFlashcardSetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Khởi tạo hoặc tìm controller. 
+    // GetX sẽ tự động delete controller này khi Screen được pop khỏi stack.
     final CreateFlashcardController controller = Get.put(CreateFlashcardController());
+
+
 
     return BaseScreen(
       child: Scaffold(
@@ -27,7 +31,7 @@ class CreateFlashcardSetScreen extends StatelessWidget {
             icon: const Icon(Icons.arrow_back),
           ),
           title: Text(
-            'Tạo học phần',
+            controller.isEditMode ? 'Chỉnh sửa học phần' :'Tạo học phần',
             style: GoogleFonts.beVietnamPro(
               fontWeight: FontWeight.bold,
               fontSize: 20.sp,
@@ -47,7 +51,7 @@ class CreateFlashcardSetScreen extends StatelessWidget {
                       ),
                     )
                   : IconButton(
-                      onPressed: () => controller.createFlashcardSet(),
+                      onPressed: () => controller.handleSave(),
                       icon: const Icon(Icons.check),
                     ),
             ),

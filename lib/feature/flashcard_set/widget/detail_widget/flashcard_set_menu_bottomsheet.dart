@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quiz_app/data/models/flashcard_set_model.dart';
+
+import '../../view/create_flashcard_set_screen.dart';
+import '../setting_widget/add_set_to_folder_bottomsheet.dart';
 
 class FlashcardSetMenuBottomSheet extends StatelessWidget {
-  const FlashcardSetMenuBottomSheet({super.key});
+  final FlashCardSetModel flashcardSet;
+  const FlashcardSetMenuBottomSheet({super.key, required this.flashcardSet});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +28,17 @@ class FlashcardSetMenuBottomSheet extends StatelessWidget {
           ),
         ),
         SizedBox(height: 20.sp),
-        MenuItem(icon: Icons.edit_outlined, title: 'Sửa', onTap: () {}),
-        MenuItem(icon: Icons.bookmark_outline, title: 'Lưu vào thư mục', onTap: () {}),
+        MenuItem(icon: Icons.edit_outlined, title: 'Sửa', onTap: () {    Get.to(() => const CreateFlashcardSetScreen(), arguments: flashcardSet);
+        }),
+        MenuItem(icon: Icons.bookmark_outline, title: 'Lưu vào thư mục', onTap: () {
+          Get.bottomSheet(
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: AddSetToFolderBottomsheet(),
+              ),
+          );
+        }),
         MenuItem(icon: Icons.copy, title: 'Tạo bản sao', onTap: () {}),
-        MenuItem(icon: Icons.delete_outlined, title: 'xóa', onTap: () {}, color: Colors.red,),
       ],
     );
   }

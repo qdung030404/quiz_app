@@ -4,16 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quiz_app/core/service/gemini_service.dart';
 import 'package:quiz_app/data/models/flashcard_model.dart';
+import 'package:quiz_app/data/models/flashcard_set_model.dart';
 import 'package:quiz_app/data/repositories/flashcard_repository.dart';
 import 'package:quiz_app/feature/flashcard_set/view/create_set_settings.dart';
 
 class FlashCardDraft {
+  final String? id;
   final TextEditingController terminologyController;
   final TextEditingController definitionController;
   final RxList<String> suggestions = <String>[].obs;
   final RxBool isGenerating = false.obs;
 
   FlashCardDraft({
+    this.id,
     TextEditingController? term,
     TextEditingController? definition,
   }) : terminologyController = term ?? TextEditingController(),
@@ -40,15 +43,43 @@ class CreateFlashcardController extends GetxController {
   final RxBool isPublic = false.obs;
   final RxBool isLoading = false.obs;
   final RxBool isSwitched = true.obs;
+  FlashCardSetModel? existingSet;
+  bool get isEditMode => existingSet != null;
   Timer? _debounce;
 
   @override
   void onInit() {
     super.onInit();
-    // Khởi tạo 2 thẻ trống ban đầu
-    flashcardDrafts.addAll([FlashCardDraft(), FlashCardDraft()]);
+    if (Get.arguments is FlashCardSetModel) {
+      existingSet = Get.arguments;
+      _fillDataForEdit();
+    } else {
+      flashcardDrafts.addAll([FlashCardDraft(), FlashCardDraft()]);
+    }
+  }
+  void _fillDataForEdit() {
+    titleController.text = existingSet!.title;
+    isPublic.value = existingSet!.isPublic;
+    flashcardDrafts.clear();
+
+    // Đổ dữ liệu từ set cũ vào danh sách nháp
+    for (var card in existingSet!.cards ?? []) {
+      flashcardDrafts.add(FlashCardDraft(
+        id: card.id, // Lưu ID để biết thẻ nào cũ, thẻ nào mới
+        term: TextEditingController(text: card.terminology),
+        definition: TextEditingController(text: card.definition),
+      ));
+    }
   }
 
+  // Hàm tổng hợp để lưu hoặc cập nhật
+  Future<void> handleSave() async {
+    if (isEditMode) {
+      await updateFlashcardSet();
+    } else {
+      await createFlashcardSet();
+    }
+  }
   void addEmptyCard() {
     flashcardDrafts.add(FlashCardDraft());
     listKey.currentState?.insertItem(
@@ -185,7 +216,95 @@ class CreateFlashcardController extends GetxController {
       isLoading.value = false;
     }
   }
+  Future<void> updateFlashcardSet() async {
+    final title = titleController.text.trim();
+    if (title.isEmpty) {
+      Get.snackbar('Lỗi', 'Tiêu đề không được bỏ trống');
+      return;
+    }
 
+    // Kiểm tra tính hợp lệ của các card
+    for (var draft in flashcardDrafts) {
+      if (draft.terminologyController.text.trim().isEmpty ||
+          draft.definitionController.text.trim().isEmpty) {
+        Get.snackbar('Lỗi', 'Vui lòng nhập đầy đủ thuật ngữ và định nghĩa');
+        return;
+      }
+    }
+
+    try {
+      isLoading.value = true;
+      final userId = _flashcardRepository.client.auth.currentUser?.id;
+      if (userId == null) return;
+
+      // 1. Cập nhật thông tin chung của Set (Title, isPublic)
+      existingSet = existingSet!.copyWith(
+        title: title,
+        isPublic: isPublic.value,
+      );
+
+      final isSetUpdated = await _flashcardRepository.updateSet(existingSet!);
+
+      if (isSetUpdated) {
+        // 2. Xử lý các thẻ bài (Cards)
+        final existingCards = existingSet!.cards ?? [];
+        final existingCardIds =
+            existingCards.map((c) => c.id).whereType<String>().toSet();
+        final draftCardIds =
+            flashcardDrafts.map((d) => d.id).whereType<String>().toSet();
+
+        // - Xóa các thẻ có trong DB nhưng không còn trong danh sách draft
+        final idsToDelete = existingCardIds.difference(draftCardIds);
+        for (final id in idsToDelete) {
+          await _flashcardRepository.deleteCard(id);
+        }
+
+        List<FlashCardModel> newCardsToAdd = [];
+
+        for (var draft in flashcardDrafts) {
+          final term = draft.terminologyController.text.trim();
+          final def = draft.definitionController.text.trim();
+
+          if (draft.id == null) {
+            // Trường hợp thẻ mới thêm vào khi đang Edit
+            newCardsToAdd.add(FlashCardModel(
+              setId: existingSet!.id!,
+              userId: userId,
+              terminology: term,
+              definition: def,
+            ));
+          } else {
+            // Thẻ cũ: Kiểm tra có thay đổi nội dung không để cập nhật
+            final currentCard =
+                existingCards.firstWhereOrNull((c) => c.id == draft.id);
+            if (currentCard != null) {
+              if (currentCard.terminology != term ||
+                  currentCard.definition != def) {
+                final updatedCard = currentCard.copyWith(
+                  terminology: term,
+                  definition: def,
+                );
+                await _flashcardRepository.updateCard(updatedCard);
+              }
+            }
+          }
+        }
+
+        // - Thêm các thẻ mới
+        if (newCardsToAdd.isNotEmpty) {
+          await _flashcardRepository.addCards(newCardsToAdd);
+        }
+
+        Get.back();
+        Get.snackbar('Thành công', 'Đã cập nhật học phần');
+      }
+    } catch (e) {
+      Get.snackbar('Lỗi', 'Không thể cập nhật: $e');
+      print('Update error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
   void goToSetting() => Get.to(
     () => const CreateSetSettings(),
     transition: Transition.fadeIn,

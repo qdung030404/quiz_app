@@ -30,6 +30,7 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
   void initState() {
     super.initState();
     // Sử dụng loadCardInSet khi màn hình được khởi tạo
+    _quizController;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.loadCardInSet(widget.flashcardSet);
     });
@@ -48,7 +49,7 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
             onPressed: () {
               Get.bottomSheet(
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   child: AddSetToFolderBottomsheet(),
                 ),
                 backgroundColor: Theme.of(context).brightness == Brightness.dark
@@ -70,7 +71,7 @@ class _FlashcardSetDetailScreenState extends State<FlashcardSetDetailScreen> {
               Get.bottomSheet(
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child: FlashcardSetMenuBottomSheet(),
+                  child: FlashcardSetMenuBottomSheet(flashcardSet: widget.flashcardSet),
                 ),
                 backgroundColor: Theme.of(context).brightness == Brightness.dark
                     ? const Color(0xff9181F4)

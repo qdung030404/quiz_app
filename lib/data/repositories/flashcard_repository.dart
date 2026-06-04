@@ -133,4 +133,53 @@ class FlashcardRepository {
       return false;
     }
   }
+  Future<bool> deleteCard(String cardId) async {
+    try {
+      await _supabase
+          .from('flashcards')
+          .delete()
+          .eq('id', cardId);
+      return true;
+    } catch (e) {
+      print(' Error deleting card: $e');
+      return false;
+    }
+  }
+  Future<bool> updateSet(FlashCardSetModel set) async {
+    try {
+      if (set.id == null) return false;
+      final updates = {
+        'title': set.title,
+        'is_public': set.isPublic,
+      };
+
+      await _supabase
+          .from('flashcard_set')
+          .update(updates)
+          .eq('id', set.id!);
+
+      return true;
+    } catch (e) {
+      print(' Error updating set: $e');
+      return false;
+    }
+  }
+  Future<bool> updateCard(FlashCardModel card) async {
+    try {
+      if (card.id == null) return false;
+      final updates = {
+        'terminology': card.terminology,
+        'definition': card.definition,
+        'terminology_language': card.terminologyLanguage,
+        'definition_language': card.definitionLanguage,};
+      await _supabase
+          .from('flashcards')
+          .update(updates)
+          .eq('id', card.id!);
+      return true;
+    } catch (e) {
+      print(' Error updating card: $e');
+      return false;
+    }
+  }
 }
