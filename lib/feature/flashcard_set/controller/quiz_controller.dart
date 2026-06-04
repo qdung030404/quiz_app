@@ -185,7 +185,7 @@ class QuizController extends GetxController {
       showFeedback.value = false;
       selectedAnswer.value = '';
     } else {
-      Get.to(() => const QuizResultScreen());
+      Get.off(() => const QuizResultScreen());
     }
   }
 }
